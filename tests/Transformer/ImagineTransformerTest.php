@@ -19,4 +19,9 @@ final class ImagineTransformerTest extends TransformerTest
     {
         return fn(ImageInterface $image) => null;
     }
+
+    protected function objectClass(): string
+    {
+        return ImageInterface::class;
+    }
 }

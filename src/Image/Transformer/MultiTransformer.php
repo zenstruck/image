@@ -58,7 +58,7 @@ final class MultiTransformer implements Transformer
      *
      * @return Transformer<T>
      */
-    private function get(string $class): Transformer
+    public function get(string $class): Transformer
     {
         if (\is_array($this->transformers) && isset($this->transformers[$class])) {
             return $this->transformers[$class]; // @phpstan-ignore-line

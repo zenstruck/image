@@ -19,4 +19,9 @@ final class InterventionTransformerTest extends TransformerTest
     {
         return fn(InterventionImage $image) => null;
     }
+
+    protected function objectClass(): string
+    {
+        return InterventionImage::class;
+    }
 }

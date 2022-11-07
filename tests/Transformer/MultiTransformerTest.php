@@ -58,9 +58,11 @@ final class MultiTransformerTest extends TestCase
      */
     public function can_provide_transformers_as_array(): void
     {
-        $resized = $this->image()->transform(fn(\stdClass $c) => null, transformer: new MultiTransformer([
+        $transformer = new MultiTransformer([
             \stdClass::class => new MockTransformer(),
-        ]));
+        ]);
+
+        $resized = $transformer->transform($this->image(), fn(\stdClass $c) => null);
 
         $this->assertSame(__FILE__, (string) $resized);
     }
@@ -74,7 +76,9 @@ final class MultiTransformerTest extends TestCase
         $container->expects($this->once())->method('has')->with(\stdClass::class)->willReturn(true);
         $container->expects($this->once())->method('get')->with(\stdClass::class)->willReturn(new MockTransformer());
 
-        $resized = $this->image()->transform(fn(\stdClass $c) => null, transformer: new MultiTransformer($container));
+        $transformer = new MultiTransformer($container);
+
+        $resized = $transformer->transform($this->image(), fn(\stdClass $c) => null);
 
         $this->assertSame(__FILE__, (string) $resized);
     }

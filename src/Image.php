@@ -2,7 +2,6 @@
 
 namespace Zenstruck;
 
-use Zenstruck\Image\Transformer;
 use Zenstruck\Image\Transformer\MultiTransformer;
 
 /**
@@ -20,8 +19,7 @@ final class Image extends \SplFileInfo
         'image/vnd.wap.wbmp' => 'wbmp',
     ];
 
-    /** @var Transformer<object> */
-    private static Transformer $transformer;
+    private static MultiTransformer $multiTransformer;
 
     /** @var mixed[] */
     private array $imageMetadata;
@@ -50,25 +48,33 @@ final class Image extends \SplFileInfo
     /**
      * @template T of object
      *
-     * @param callable(T):T            $manipulator
-     * @param Transformer<object>|null $transformer
+     * @param callable(T):T $manipulator
      */
-    public function transform(callable $manipulator, array $options = [], ?Transformer $transformer = null): self
+    public function transform(callable $manipulator, array $options = []): self
     {
-        $transformer ??= self::$transformer ??= new MultiTransformer();
-
-        return $transformer->transform($this, $manipulator, $options); // @phpstan-ignore-line
+        return self::multiTransformer()->transform($this, $manipulator, $options); // @phpstan-ignore-line
     }
 
     /**
      * @template T of object
      *
-     * @param callable(T):T            $manipulator
-     * @param Transformer<object>|null $transformer
+     * @param callable(T):T $manipulator
      */
-    public function transformInPlace(callable $manipulator, array $options = [], ?Transformer $transformer = null): self
+    public function transformInPlace(callable $manipulator, array $options = []): self
     {
-        return $this->transform($manipulator, \array_merge($options, ['output' => $this]), $transformer);
+        return $this->transform($manipulator, \array_merge($options, ['output' => $this]));
+    }
+
+    /**
+     * @template T of object
+     *
+     * @param class-string<T> $class
+     *
+     * @return T
+     */
+    public function transformer(string $class): object
+    {
+        return self::multiTransformer()->get($class)->object($this);
     }
 
     public function height(): int
@@ -214,6 +220,11 @@ final class Image extends \SplFileInfo
         if (\file_exists($this)) {
             \unlink($this);
         }
+    }
+
+    private static function multiTransformer(): MultiTransformer
+    {
+        return self::$multiTransformer ??= new MultiTransformer();
     }
 
     /**

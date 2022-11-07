@@ -16,6 +16,9 @@ final class InterventionTransformer extends BaseTransformer
 {
     public function __construct(private ?ImageManager $manager = null)
     {
+        if (!\class_exists(ImageManager::class)) {
+            throw new \LogicException('intervention/image required. Install with "composer require intervention/image".');
+        }
     }
 
     public function object(\SplFileInfo $image): object

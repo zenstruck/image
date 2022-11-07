@@ -29,4 +29,9 @@ final class ImagickTransformerTest extends TransformerTest
     {
         return fn(\Imagick $image) => null;
     }
+
+    protected function objectClass(): string
+    {
+        return \Imagick::class;
+    }
 }

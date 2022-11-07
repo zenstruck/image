@@ -82,7 +82,19 @@ abstract class TransformerTest extends TestCase
         $image->transform($this->invalidManipulator());
     }
 
+    /**
+     * @test
+     */
+    public function can_get_transformer_object(): void
+    {
+        $image = new Image(__DIR__.'/Fixture/files/symfony.jpg');
+
+        $this->assertInstanceOf($this->objectClass(), $image->transformer($this->objectClass()));
+    }
+
     abstract protected function invalidManipulator(): callable;
 
     abstract protected function manipulator(): callable;
+
+    abstract protected function objectClass(): string;
 }

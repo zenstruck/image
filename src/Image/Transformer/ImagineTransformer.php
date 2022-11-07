@@ -29,6 +29,10 @@ final class ImagineTransformer extends BaseTransformer
      */
     public static function createFor(string $class): self
     {
+        if (!\interface_exists(ImageInterface::class)) {
+            throw new \LogicException('imagine/imagine required. Install with "composer require imagine/imagine".');
+        }
+
         return match ($class) {
             ImageInterface::class, GdImage::class => new self(new GdImagine()),
             ImagickImage::class => new self(new ImagickImagine()),
