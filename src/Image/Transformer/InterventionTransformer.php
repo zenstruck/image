@@ -5,7 +5,6 @@ namespace Zenstruck\Image\Transformer;
 use Intervention\Image\Image as InterventionImage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\ImageManagerStatic;
-use Zenstruck\Image;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -19,16 +18,18 @@ final class InterventionTransformer extends BaseTransformer
     {
     }
 
-    protected function doTransform(Image $image, callable $manipulator, array $options): void
+    public function object(\SplFileInfo $image): object
     {
-        $interventionImage = $this->manager ? $this->manager->make($image) : ImageManagerStatic::make($image);
+        return $this->manager ? $this->manager->make($image) : ImageManagerStatic::make($image);
+    }
 
-        $interventionImage = $manipulator($interventionImage);
+    protected static function expectedClass(): string
+    {
+        return InterventionImage::class;
+    }
 
-        if (!$interventionImage instanceof InterventionImage) {
-            throw new \LogicException('Manipulator callback must return an Intervention\Image object.');
-        }
-
-        $interventionImage->save($options['output'], $options['quality'] ?? null, $options['format']);
+    protected function save(object $object, array $options): void
+    {
+        $object->save($options['output'], $options['quality'] ?? null, $options['format']);
     }
 }

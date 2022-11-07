@@ -2,8 +2,6 @@
 
 namespace Zenstruck\Image\Transformer;
 
-use Zenstruck\Image;
-
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  * @author Jakub Caban <kuba.iluvatar@gmail.com>
@@ -19,18 +17,22 @@ final class ImagickTransformer extends BaseTransformer
         }
     }
 
-    protected function doTransform(Image $image, callable $manipulator, array $options): void
+    public function object(\SplFileInfo $image): object
     {
         $imagick = new \Imagick();
         $imagick->readImage((string) $image);
 
-        $imagick = $manipulator($imagick);
+        return $imagick;
+    }
 
-        if (!$imagick instanceof \Imagick) {
-            throw new \LogicException('Manipulator callback must return an Imagick object.');
-        }
+    protected static function expectedClass(): string
+    {
+        return \Imagick::class;
+    }
 
-        $imagick->setImageFormat($options['format']);
-        $imagick->writeImage($options['output']);
+    protected function save(object $object, array $options): void
+    {
+        $object->setImageFormat($options['format']);
+        $object->writeImage($options['output']);
     }
 }

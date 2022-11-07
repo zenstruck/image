@@ -21,13 +21,25 @@ abstract class BaseTransformer implements Transformer
         $output = $options['output'] ??= TempFile::withExtension($options['format']);
         $options['output'] = (string) $options['output'];
 
-        $this->doTransform($image, $manipulator, $options);
+        $transformed = $manipulator($this->object($image));
+
+        if (!\is_a($transformed, static::expectedClass())) {
+            throw new \LogicException(\sprintf('Manipulator callback must return a "%s" object.', static::expectedClass()));
+        }
+
+        $this->save($transformed, $options);
 
         return Image::wrap($output)->refresh();
     }
 
     /**
+     * @return class-string<T>
+     */
+    abstract protected static function expectedClass(): string;
+
+    /**
+     * @param T                                                      $object
      * @param array{format:string,output:string}|array<string,mixed> $options
      */
-    abstract protected function doTransform(Image $image, callable $manipulator, array $options): void;
+    abstract protected function save(object $object, array $options): void;
 }

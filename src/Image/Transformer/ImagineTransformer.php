@@ -10,7 +10,6 @@ use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Imagick\Image as ImagickImage;
 use Imagine\Imagick\Imagine as ImagickImagine;
-use Zenstruck\Image;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -38,14 +37,18 @@ final class ImagineTransformer extends BaseTransformer
         };
     }
 
-    protected function doTransform(Image $image, callable $manipulator, array $options): void
+    public function object(\SplFileInfo $image): object
     {
-        $imagineImage = $manipulator($this->imagine->open($image));
+        return $this->imagine->open($image);
+    }
 
-        if (!$imagineImage instanceof ImageInterface) {
-            throw new \LogicException('Manipulator callback must return an Imagine image object.');
-        }
+    protected static function expectedClass(): string
+    {
+        return ImageInterface::class;
+    }
 
-        $imagineImage->save($options['output'], $options);
+    protected function save(object $object, array $options): void
+    {
+        $object->save($options['output'], $options);
     }
 }

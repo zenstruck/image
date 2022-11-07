@@ -15,4 +15,9 @@ interface Transformer
      * @param callable(T):T $manipulator
      */
     public function transform(\SplFileInfo $image, callable $manipulator, array $options = []): Image;
+
+    /**
+     * @return T
+     */
+    public function object(\SplFileInfo $image): object;
 }

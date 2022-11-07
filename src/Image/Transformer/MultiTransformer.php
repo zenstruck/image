@@ -46,6 +46,11 @@ final class MultiTransformer implements Transformer
         return $this->get($type)->transform($image, $manipulator, $options);
     }
 
+    public function object(\SplFileInfo $image): object
+    {
+        throw new \BadMethodCallException();
+    }
+
     /**
      * @template T of object
      *
