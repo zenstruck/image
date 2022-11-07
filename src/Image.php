@@ -2,6 +2,7 @@
 
 namespace Zenstruck;
 
+use Zenstruck\Image\BlurHash;
 use Zenstruck\Image\Transformer\MultiTransformer;
 
 /**
@@ -75,6 +76,11 @@ final class Image extends \SplFileInfo
     public function transformer(string $class): object
     {
         return self::multiTransformer()->get($class)->object($this);
+    }
+
+    public function blurHash(): BlurHash
+    {
+        return new BlurHash($this);
     }
 
     public function height(): int
