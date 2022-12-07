@@ -10,12 +10,12 @@ use Zenstruck\Image\Tests\TransformerTest;
  */
 final class ImagineTransformerTest extends TransformerTest
 {
-    protected function manipulator(): callable
+    protected function filterCallback(): callable
     {
         return fn(ImageInterface $image) => $image->thumbnail($image->getSize()->widen(100));
     }
 
-    protected function invalidManipulator(): callable
+    protected function invalidFilterCallback(): callable
     {
         return fn(ImageInterface $image) => null;
     }

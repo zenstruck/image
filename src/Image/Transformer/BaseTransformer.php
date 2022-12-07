@@ -14,17 +14,17 @@ use Zenstruck\TempFile;
  */
 abstract class BaseTransformer implements Transformer
 {
-    final public function transform(\SplFileInfo $image, callable $manipulator, array $options = []): Image
+    final public function transform(\SplFileInfo $image, callable $filter, array $options = []): Image
     {
         $image = Image::wrap($image);
         $options['format'] ??= $image->guessExtension();
         $output = $options['output'] ??= TempFile::withExtension($options['format']);
         $options['output'] = (string) $options['output'];
 
-        $transformed = $manipulator($this->object($image));
+        $transformed = $filter($this->object($image));
 
         if (!\is_a($transformed, static::expectedClass())) {
-            throw new \LogicException(\sprintf('Manipulator callback must return a "%s" object.', static::expectedClass()));
+            throw new \LogicException(\sprintf('Filter callback must return a "%s" object.', static::expectedClass()));
         }
 
         $this->save($transformed, $options);

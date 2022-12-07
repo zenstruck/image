@@ -18,14 +18,14 @@ abstract class TransformerTest extends TestCase
     {
         $image = new Image(__DIR__.'/Fixture/files/symfony.jpg');
 
-        $resized = $image->transform($this->manipulator());
+        $resized = $image->transform($this->filterCallback());
 
         $this->assertSame(100, $resized->width());
         $this->assertSame(120, $resized->height());
         $this->assertSame('jpg', $resized->getExtension());
         $this->assertSame('/tmp', \dirname($resized));
 
-        $resized = $image->transform($this->manipulator(), ['format' => 'png']);
+        $resized = $image->transform($this->filterCallback(), ['format' => 'png']);
 
         $this->assertSame(100, $resized->width());
         $this->assertSame(120, $resized->height());
@@ -41,7 +41,7 @@ abstract class TransformerTest extends TestCase
         $output = TempFile::new();
         $image = new Image(__DIR__.'/Fixture/files/symfony.jpg');
 
-        $resized = $image->transform($this->manipulator(), ['output' => $output]);
+        $resized = $image->transform($this->filterCallback(), ['output' => $output]);
 
         $this->assertSame((string) $output, (string) $resized);
         $this->assertSame(100, $resized->width());
@@ -59,7 +59,7 @@ abstract class TransformerTest extends TestCase
         $this->assertSame(678, $image->height());
         $this->assertSame(563, $image->width());
 
-        $resized = $image->transformInPlace($this->manipulator());
+        $resized = $image->transformInPlace($this->filterCallback());
 
         $this->assertSame($image, $resized);
         $this->assertSame((string) $image, (string) $resized);
@@ -72,14 +72,14 @@ abstract class TransformerTest extends TestCase
     /**
      * @test
      */
-    public function manipulator_must_return_proper_object(): void
+    public function filter_callback_must_return_proper_object(): void
     {
         $image = new Image(__DIR__.'/Fixture/files/symfony.jpg');
 
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Manipulator callback must return');
+        $this->expectExceptionMessage('Filter callback must return');
 
-        $image->transform($this->invalidManipulator());
+        $image->transform($this->invalidFilterCallback());
     }
 
     /**
@@ -92,9 +92,9 @@ abstract class TransformerTest extends TestCase
         $this->assertInstanceOf($this->objectClass(), $image->transformer($this->objectClass()));
     }
 
-    abstract protected function invalidManipulator(): callable;
+    abstract protected function invalidFilterCallback(): callable;
 
-    abstract protected function manipulator(): callable;
+    abstract protected function filterCallback(): callable;
 
     abstract protected function objectClass(): string;
 }

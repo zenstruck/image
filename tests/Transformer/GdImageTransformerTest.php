@@ -9,12 +9,12 @@ use Zenstruck\Image\Tests\TransformerTest;
  */
 final class GdImageTransformerTest extends TransformerTest
 {
-    protected function manipulator(): callable
+    protected function filterCallback(): callable
     {
         return fn(\GdImage $i) => \imagescale($i, 100);
     }
 
-    protected function invalidManipulator(): callable
+    protected function invalidFilterCallback(): callable
     {
         return fn(\GdImage $i) => null;
     }

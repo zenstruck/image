@@ -28,22 +28,22 @@ final class MultiTransformer implements Transformer
     {
     }
 
-    public function transform(\SplFileInfo $image, callable $manipulator, array $options = []): Image
+    public function transform(\SplFileInfo $image, callable $filter, array $options = []): Image
     {
-        $ref = new \ReflectionFunction($manipulator instanceof \Closure ? $manipulator : \Closure::fromCallable($manipulator));
+        $ref = new \ReflectionFunction($filter instanceof \Closure ? $filter : \Closure::fromCallable($filter));
         $type = ($ref->getParameters()[0] ?? null)?->getType();
 
         if (!$type instanceof \ReflectionNamedType) {
-            throw new \LogicException('Manipulator callback must have a single typed argument (union/intersection arguments are not allowed).');
+            throw new \LogicException('Filter callback must have a single typed argument (union/intersection arguments are not allowed).');
         }
 
         $type = $type->getName();
 
         if (!\class_exists($type) && !\interface_exists($type)) {
-            throw new \LogicException(\sprintf('First parameter type "%s" for manipulator callback is not a valid class/interface.', $type ?: '(none)'));
+            throw new \LogicException(\sprintf('First parameter type "%s" for filter callback is not a valid class/interface.', $type ?: '(none)'));
         }
 
-        return $this->get($type)->transform($image, $manipulator, $options);
+        return $this->get($type)->transform($image, $filter, $options);
     }
 
     public function object(\SplFileInfo $image): object

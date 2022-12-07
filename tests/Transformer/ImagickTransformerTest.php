@@ -16,7 +16,7 @@ final class ImagickTransformerTest extends TransformerTest
         }
     }
 
-    protected function manipulator(): callable
+    protected function filterCallback(): callable
     {
         return function(\Imagick $image) {
             $image->scaleImage(100, 0);
@@ -25,7 +25,7 @@ final class ImagickTransformerTest extends TransformerTest
         };
     }
 
-    protected function invalidManipulator(): callable
+    protected function invalidFilterCallback(): callable
     {
         return fn(\Imagick $image) => null;
     }
