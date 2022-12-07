@@ -53,7 +53,7 @@ final class Image extends \SplFileInfo
      */
     public function transform(object|callable $filter, array $options = []): self
     {
-        return self::multiTransformer()->transform($this, $filter, $options);
+        return self::multiTransformer()->transform($this, $filter, $options); // @phpstan-ignore-line
     }
 
     /**

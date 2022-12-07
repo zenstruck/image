@@ -30,9 +30,6 @@ final class MultiTransformer implements Transformer
     {
     }
 
-    /**
-     * @param object|callable $filter
-     */
     public function transform(\SplFileInfo $image, object|callable $filter, array $options = []): Image
     {
         if ($filter instanceof ImagineFilter) {
@@ -60,7 +57,7 @@ final class MultiTransformer implements Transformer
             throw new \LogicException(\sprintf('First parameter type "%s" for filter callback is not a valid class/interface.', $type ?: '(none)'));
         }
 
-        return $this->get($type)->transform($image, $filter, $options);
+        return $this->get($type)->transform($image, $filter, $options); // @phpstan-ignore-line
     }
 
     public function object(\SplFileInfo $image): object
