@@ -106,28 +106,40 @@ $resized = $image->transformInPlace(function(\GdImage $image): \GdImage {
 }); // overrides the original image file
 ```
 
-#### Manipulator Objects
+#### Filter Objects
 
-Because `transform()` and `transformInPlace()` accept any callable, you can wrap complex
-transformations into invokable _manipulator objects_:
+Both _Imagine_ and _Intervention_ have the concept of _filters_. These are objects
+that can be passed directly to `transform()` and `transformInPlace()`:
 
 ```php
-use Intervention\Image\Constraint;
-use Intervention\Image\Image as InterventionImage;
+/** @var Imagine\Filter\FilterInterface $imagineFilter */
+/** @var Intervention\Image\Filters\FilterInterface $interventionFilter */
+/** @var Zenstruck\Image $image */
 
+$transformed = $image->transform($imagineFilter);
+$transformed = $image->transform($interventionFilter);
+
+$image->transformInPlace($imagineFilter);
+$image->transformInPlace($interventionFilter);
+```
+
+##### Custom Filter Objects
+
+Because `transform()` and `transformInPlace()` accept any callable, you can wrap complex
+transformations into invokable _filter objects_:
+
+```php
 class GreyscaleThumbnail
 {
     public function __construct(private int $width, private int $height)
     {
     }
 
-    public function __invoke(InterventionImage $image): InterventionImage
+    public function __invoke(\GdImage $image): \GdImage
     {
-        return $image
-            ->resize($this->width, $this->width, fn(Constraint $c) => $c->aspectRatio())
-            ->greyscale()
-            // ...
-        ;
+        // greyscale and resize to $this->width/$this->height
+
+        return $image;
     }
 }
 ```
@@ -138,6 +150,8 @@ To use, pass a new instance to `transform()` or `transformInPlace()`:
 /** @var Zenstruck\Image $image */
 
 $thumbnail = $image->transform(new GreyscaleThumbnail(200, 200));
+
+$image->transformInPlace(new GreyscaleThumbnail(200, 200));
 ```
 
 #### Transformation Object

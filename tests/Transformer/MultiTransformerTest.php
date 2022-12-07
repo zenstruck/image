@@ -91,7 +91,7 @@ final class MultiTransformerTest extends TestCase
 
 class MockTransformer implements Transformer
 {
-    public function transform(\SplFileInfo $image, callable $filter, array $options = []): Image
+    public function transform(\SplFileInfo $image, object|callable $filter, array $options = []): Image
     {
         return new Image(__FILE__);
     }

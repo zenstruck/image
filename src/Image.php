@@ -49,19 +49,19 @@ final class Image extends \SplFileInfo
     /**
      * @template T of object
      *
-     * @param callable(T):T $filter
+     * @param object|callable(T):T $filter
      */
-    public function transform(callable $filter, array $options = []): self
+    public function transform(object|callable $filter, array $options = []): self
     {
-        return self::multiTransformer()->transform($this, $filter, $options); // @phpstan-ignore-line
+        return self::multiTransformer()->transform($this, $filter, $options);
     }
 
     /**
      * @template T of object
      *
-     * @param callable(T):T $filter
+     * @param object|callable(T):T $filter
      */
-    public function transformInPlace(callable $filter, array $options = []): self
+    public function transformInPlace(object|callable $filter, array $options = []): self
     {
         return $this->transform($filter, \array_merge($options, ['output' => $this]));
     }

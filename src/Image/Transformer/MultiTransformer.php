@@ -2,10 +2,12 @@
 
 namespace Zenstruck\Image\Transformer;
 
+use Imagine\Filter\FilterInterface as ImagineFilter;
 use Imagine\Gd\Image as GdImagineImage;
 use Imagine\Gmagick\Image as GmagickImagineImage;
 use Imagine\Image\ImageInterface as ImagineImage;
 use Imagine\Imagick\Image as ImagickImagineImage;
+use Intervention\Image\Filters\FilterInterface as InterventionFilter;
 use Intervention\Image\Image as InterventionImage;
 use Psr\Container\ContainerInterface;
 use Zenstruck\Image;
@@ -28,8 +30,23 @@ final class MultiTransformer implements Transformer
     {
     }
 
-    public function transform(\SplFileInfo $image, callable $filter, array $options = []): Image
+    /**
+     * @param object|callable $filter
+     */
+    public function transform(\SplFileInfo $image, object|callable $filter, array $options = []): Image
     {
+        if ($filter instanceof ImagineFilter) {
+            $filter = static fn(ImagineImage $i) => $filter->apply($i);
+        }
+
+        if ($filter instanceof InterventionFilter) {
+            $filter = static fn(InterventionImage $i) => $i->filter($filter);
+        }
+
+        if (!\is_callable($filter)) {
+            throw new \LogicException('Filter is not callable.');
+        }
+
         $ref = new \ReflectionFunction($filter instanceof \Closure ? $filter : \Closure::fromCallable($filter));
         $type = ($ref->getParameters()[0] ?? null)?->getType();
 
