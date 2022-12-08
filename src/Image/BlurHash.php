@@ -16,6 +16,9 @@ use Zenstruck\Image;
  */
 final class BlurHash implements \Stringable
 {
+    /**
+     * @internal
+     */
     public function __construct(private Image $image)
     {
         if (!\class_exists(BlurHashEncoder::class)) {
