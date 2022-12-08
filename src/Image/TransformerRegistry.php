@@ -34,11 +34,19 @@ final class TransformerRegistry
     public function transform(\SplFileInfo $image, object|callable $filter, array $options = []): Image
     {
         if ($filter instanceof ImagineFilter) {
-            $filter = static fn(ImagineImage $i) => $filter->apply($i);
+            return $this->get(ImagineImage::class)->transform(
+                $image,
+                static fn(ImagineImage $i) => $filter->apply($i),
+                $options
+            );
         }
 
         if ($filter instanceof InterventionFilter) {
-            $filter = static fn(InterventionImage $i) => $i->filter($filter);
+            return $this->get(InterventionImage::class)->transform(
+                $image,
+                static fn(InterventionImage $i) => $i->filter($filter),
+                $options
+            );
         }
 
         if (!\is_callable($filter)) {
