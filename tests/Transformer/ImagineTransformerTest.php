@@ -15,6 +15,16 @@ final class ImagineTransformerTest extends FilterObjectTransformerTest
         return fn(ImageInterface $image) => $image->thumbnail($image->getSize()->widen(100));
     }
 
+    protected function filterInvokable(): object
+    {
+        return new class() {
+            public function __invoke(ImageInterface $image): ImageInterface
+            {
+                return $image->thumbnail($image->getSize()->widen(100));
+            }
+        };
+    }
+
     protected function filterObject(): FilterInterface
     {
         return new class() implements FilterInterface {

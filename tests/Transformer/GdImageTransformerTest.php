@@ -9,6 +9,16 @@ use Zenstruck\Image\Tests\TransformerTest;
  */
 final class GdImageTransformerTest extends TransformerTest
 {
+    protected function filterInvokable(): object
+    {
+        return new class() {
+            public function __invoke(\GdImage $image): \GdImage
+            {
+                return \imagescale($image, 100);
+            }
+        };
+    }
+
     protected function filterCallback(): callable
     {
         return fn(\GdImage $i) => \imagescale($i, 100);

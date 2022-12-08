@@ -15,6 +15,16 @@ final class InterventionTransformerTest extends FilterObjectTransformerTest
         return fn(InterventionImage $image) => $image->widen(100);
     }
 
+    protected function filterInvokable(): object
+    {
+        return new class() {
+            public function __invoke(InterventionImage $image): InterventionImage
+            {
+                return $image->widen(100);
+            }
+        };
+    }
+
     protected function filterObject(): FilterInterface
     {
         return new class() implements FilterInterface {

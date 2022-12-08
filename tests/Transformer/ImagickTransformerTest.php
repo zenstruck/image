@@ -16,6 +16,18 @@ final class ImagickTransformerTest extends TransformerTest
         }
     }
 
+    protected function filterInvokable(): object
+    {
+        return new class() {
+            public function __invoke(\Imagick $image): \Imagick
+            {
+                $image->scaleImage(100, 0);
+
+                return $image;
+            }
+        };
+    }
+
     protected function filterCallback(): callable
     {
         return function(\Imagick $image) {
