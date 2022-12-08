@@ -1,17 +1,17 @@
 <?php
 
-namespace Zenstruck\Image\Tests\Transformer;
+namespace Zenstruck\Image\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Zenstruck\Image;
 use Zenstruck\Image\Transformer;
-use Zenstruck\Image\Transformer\MultiTransformer;
+use Zenstruck\Image\TransformerRegistry;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class MultiTransformerTest extends TestCase
+final class TransformerRegistryTest extends TestCase
 {
     /**
      * @test
@@ -58,7 +58,7 @@ final class MultiTransformerTest extends TestCase
      */
     public function can_provide_transformers_as_array(): void
     {
-        $transformer = new MultiTransformer([
+        $transformer = new TransformerRegistry([
             \stdClass::class => new MockTransformer(),
         ]);
 
@@ -76,7 +76,7 @@ final class MultiTransformerTest extends TestCase
         $container->expects($this->once())->method('has')->with(\stdClass::class)->willReturn(true);
         $container->expects($this->once())->method('get')->with(\stdClass::class)->willReturn(new MockTransformer());
 
-        $transformer = new MultiTransformer($container);
+        $transformer = new TransformerRegistry($container);
 
         $resized = $transformer->transform($this->image(), fn(\stdClass $c) => null);
 
@@ -85,7 +85,7 @@ final class MultiTransformerTest extends TestCase
 
     private function image(): Image
     {
-        return Image::from(new \SplFileInfo(__DIR__.'/../Fixture/files/symfony.jpg'));
+        return Image::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
     }
 }
 

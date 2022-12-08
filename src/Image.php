@@ -3,7 +3,7 @@
 namespace Zenstruck;
 
 use Zenstruck\Image\BlurHash;
-use Zenstruck\Image\Transformer\MultiTransformer;
+use Zenstruck\Image\TransformerRegistry;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -20,7 +20,7 @@ final class Image extends \SplFileInfo
         'image/vnd.wap.wbmp' => 'wbmp',
     ];
 
-    private static MultiTransformer $multiTransformer;
+    private static TransformerRegistry $transformerRegistry;
 
     /** @var mixed[] */
     private array $imageMetadata;
@@ -53,7 +53,7 @@ final class Image extends \SplFileInfo
      */
     public function transform(object|callable $filter, array $options = []): self
     {
-        return self::multiTransformer()->transform($this, $filter, $options); // @phpstan-ignore-line
+        return self::transformerRegistry()->transform($this, $filter, $options);
     }
 
     /**
@@ -75,7 +75,7 @@ final class Image extends \SplFileInfo
      */
     public function transformer(string $class): object
     {
-        return self::multiTransformer()->get($class)->object($this);
+        return self::transformerRegistry()->get($class)->object($this);
     }
 
     public function blurHash(): BlurHash
@@ -228,9 +228,9 @@ final class Image extends \SplFileInfo
         }
     }
 
-    private static function multiTransformer(): MultiTransformer
+    private static function transformerRegistry(): TransformerRegistry
     {
-        return self::$multiTransformer ??= new MultiTransformer();
+        return self::$transformerRegistry ??= new TransformerRegistry();
     }
 
     /**

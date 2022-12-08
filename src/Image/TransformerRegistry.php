@@ -1,6 +1,6 @@
 <?php
 
-namespace Zenstruck\Image\Transformer;
+namespace Zenstruck\Image;
 
 use Imagine\Filter\FilterInterface as ImagineFilter;
 use Imagine\Gd\Image as GdImagineImage;
@@ -11,14 +11,15 @@ use Intervention\Image\Filters\FilterInterface as InterventionFilter;
 use Intervention\Image\Image as InterventionImage;
 use Psr\Container\ContainerInterface;
 use Zenstruck\Image;
-use Zenstruck\Image\Transformer;
+use Zenstruck\Image\Transformer\GdImageTransformer;
+use Zenstruck\Image\Transformer\ImagickTransformer;
+use Zenstruck\Image\Transformer\ImagineTransformer;
+use Zenstruck\Image\Transformer\InterventionTransformer;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
- *
- * @implements Transformer<object>
  */
-final class MultiTransformer implements Transformer
+final class TransformerRegistry
 {
     /** @var array<class-string,Transformer<object>> */
     private static array $defaultTransformers = [];
@@ -57,12 +58,7 @@ final class MultiTransformer implements Transformer
             throw new \LogicException(\sprintf('First parameter type "%s" for filter callback is not a valid class/interface.', $type ?: '(none)'));
         }
 
-        return $this->get($type)->transform($image, $filter, $options); // @phpstan-ignore-line
-    }
-
-    public function object(\SplFileInfo $image): object
-    {
-        throw new \BadMethodCallException();
+        return $this->get($type)->transform($image, $filter, $options);
     }
 
     /**
