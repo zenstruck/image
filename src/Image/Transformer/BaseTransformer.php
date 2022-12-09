@@ -2,7 +2,7 @@
 
 namespace Zenstruck\Image\Transformer;
 
-use Zenstruck\Image;
+use Zenstruck\Image\LocalImage;
 use Zenstruck\Image\Transformer;
 use Zenstruck\TempFile;
 
@@ -14,9 +14,9 @@ use Zenstruck\TempFile;
  */
 abstract class BaseTransformer implements Transformer
 {
-    final public function transform(\SplFileInfo $image, callable $filter, array $options = []): Image
+    final public function transform(\SplFileInfo $image, callable $filter, array $options = []): \SplFileInfo
     {
-        $image = Image::wrap($image);
+        $image = LocalImage::wrap($image);
         $options['format'] ??= $image->guessExtension();
         $output = $options['output'] ??= TempFile::withExtension($options['format']);
         $options['output'] = (string) $options['output'];
@@ -29,7 +29,7 @@ abstract class BaseTransformer implements Transformer
 
         $this->save($transformed, $options);
 
-        return Image::wrap($output)->refresh();
+        return $output;
     }
 
     /**

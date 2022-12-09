@@ -10,7 +10,6 @@ use Imagine\Imagick\Image as ImagickImagineImage;
 use Intervention\Image\Filters\FilterInterface as InterventionFilter;
 use Intervention\Image\Image as InterventionImage;
 use Psr\Container\ContainerInterface;
-use Zenstruck\Image;
 use Zenstruck\Image\Transformer\GdImageTransformer;
 use Zenstruck\Image\Transformer\ImagickTransformer;
 use Zenstruck\Image\Transformer\ImagineTransformer;
@@ -31,7 +30,7 @@ final class TransformerRegistry
     {
     }
 
-    public function transform(\SplFileInfo $image, object|callable $filter, array $options = []): Image
+    public function transform(\SplFileInfo $image, object|callable $filter, array $options = []): \SplFileInfo
     {
         if ($filter instanceof ImagineFilter) {
             return $this->get(ImagineImage::class)->transform(
