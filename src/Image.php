@@ -41,10 +41,6 @@ interface Image
 
     public function isLandscape(): bool;
 
-    public function mimeType(): string;
-
-    public function guessExtension(): string;
-
     public function exif(): array;
 
     public function iptc(): array;
