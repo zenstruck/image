@@ -10,6 +10,8 @@ use Zenstruck\TempFile;
  */
 final class LocalImage extends \SplFileInfo implements Image
 {
+    use CalculatedProperties;
+
     private const MIME_EXTENSION_MAP = [
         'image/jpeg' => 'jpg',
         'image/gif' => 'gif',
@@ -86,31 +88,6 @@ final class LocalImage extends \SplFileInfo implements Image
     public function width(): int
     {
         return $this->imageMetadata()[0];
-    }
-
-    public function aspectRatio(): float
-    {
-        return $this->width() / $this->height();
-    }
-
-    public function pixels(): int
-    {
-        return $this->width() * $this->height();
-    }
-
-    public function isSquare(): bool
-    {
-        return $this->width() === $this->height();
-    }
-
-    public function isPortrait(): bool
-    {
-        return $this->height() > $this->width();
-    }
-
-    public function isLandscape(): bool
-    {
-        return $this->width() > $this->height();
     }
 
     public function mimeType(): string
