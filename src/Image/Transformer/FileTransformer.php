@@ -40,16 +40,6 @@ abstract class FileTransformer implements Transformer
         return Image::wrap($output);
     }
 
-    final public function object(Image $image): object
-    {
-        return $this->createObject($image);
-    }
-
-    /**
-     * @return T
-     */
-    abstract protected function createObject(\SplFileInfo $image): object;
-
     /**
      * @return class-string<T>
      */

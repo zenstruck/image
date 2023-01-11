@@ -11,6 +11,8 @@
 
 namespace Zenstruck\Image\Transformer;
 
+use Zenstruck\Image;
+
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  * @author Jakub Caban <kuba.iluvatar@gmail.com>
@@ -26,7 +28,7 @@ final class ImagickTransformer extends FileTransformer
         }
     }
 
-    protected function createObject(\SplFileInfo $image): object
+    public function object(Image $image): object
     {
         $imagick = new \Imagick();
         $imagick->readImage((string) $image);
