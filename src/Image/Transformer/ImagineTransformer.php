@@ -14,9 +14,9 @@ use Imagine\Imagick\Imagine as ImagickImagine;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
- * @extends BaseTransformer<ImageInterface>
+ * @extends FileTransformer<ImageInterface>
  */
-final class ImagineTransformer extends BaseTransformer
+final class ImagineTransformer extends FileTransformer
 {
     public function __construct(private ImagineInterface $imagine)
     {
@@ -41,7 +41,7 @@ final class ImagineTransformer extends BaseTransformer
         };
     }
 
-    public function object(\SplFileInfo $image): object
+    protected function createObject(\SplFileInfo $image): object
     {
         return $this->imagine->open($image);
     }

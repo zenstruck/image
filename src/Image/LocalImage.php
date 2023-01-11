@@ -50,7 +50,10 @@ final class LocalImage extends \SplFileInfo implements Image
 
     public function transform(object|callable $filter, array $options = []): self
     {
-        return self::wrap(self::transformerRegistry()->transform($this, $filter, $options))->refresh();
+        /** @var self $transformed */
+        $transformed = self::transformerRegistry()->transform($this, $filter, $options);
+
+        return $transformed->refresh();
     }
 
     /**

@@ -6,9 +6,9 @@ namespace Zenstruck\Image\Transformer;
  * @author Kevin Bond <kevinbond@gmail.com>
  * @author Jakub Caban <kuba.iluvatar@gmail.com>
  *
- * @extends BaseTransformer<\Imagick>
+ * @extends FileTransformer<\Imagick>
  */
-final class ImagickTransformer extends BaseTransformer
+final class ImagickTransformer extends FileTransformer
 {
     public function __construct()
     {
@@ -17,7 +17,7 @@ final class ImagickTransformer extends BaseTransformer
         }
     }
 
-    public function object(\SplFileInfo $image): object
+    protected function createObject(\SplFileInfo $image): object
     {
         $imagick = new \Imagick();
         $imagick->readImage((string) $image);

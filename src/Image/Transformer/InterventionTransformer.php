@@ -10,9 +10,9 @@ use Intervention\Image\ImageManagerStatic;
  * @author Kevin Bond <kevinbond@gmail.com>
  * @author Jakub Caban <kuba.iluvatar@gmail.com>
  *
- * @extends BaseTransformer<InterventionImage>
+ * @extends FileTransformer<InterventionImage>
  */
-final class InterventionTransformer extends BaseTransformer
+final class InterventionTransformer extends FileTransformer
 {
     public function __construct(private ?ImageManager $manager = null)
     {
@@ -21,7 +21,7 @@ final class InterventionTransformer extends BaseTransformer
         }
     }
 
-    public function object(\SplFileInfo $image): object
+    protected function createObject(\SplFileInfo $image): object
     {
         return $this->manager ? $this->manager->make($image) : ImageManagerStatic::make($image);
     }
