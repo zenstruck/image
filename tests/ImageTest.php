@@ -4,12 +4,11 @@ namespace Zenstruck\Image\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Zenstruck\Image;
-use Zenstruck\Image\LocalImage;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class LocalImageTest extends TestCase
+final class ImageTest extends TestCase
 {
     /**
      * @test
@@ -17,15 +16,15 @@ final class LocalImageTest extends TestCase
      */
     public function can_get_metadata(string $file, int $height, int $width, string $mime, string $extension): void
     {
-        $this->metadataAssertions(LocalImage::wrap($file), $height, $width, $mime, $extension);
+        $this->metadataAssertions(Image::wrap($file), $height, $width, $mime, $extension);
 
-        $this->metadataAssertions($image = LocalImage::from(\file_get_contents($file)), $height, $width, $mime, $extension);
+        $this->metadataAssertions($image = Image::from(\file_get_contents($file)), $height, $width, $mime, $extension);
         $this->assertSame('/tmp', \dirname($image));
 
-        $this->metadataAssertions($image = LocalImage::from(\fopen($file, 'r')), $height, $width, $mime, $extension);
+        $this->metadataAssertions($image = Image::from(\fopen($file, 'r')), $height, $width, $mime, $extension);
         $this->assertSame('/tmp', \dirname($image));
 
-        $this->metadataAssertions($image = LocalImage::from(new \SplFileInfo($file)), $height, $width, $mime, $extension);
+        $this->metadataAssertions($image = Image::from(new \SplFileInfo($file)), $height, $width, $mime, $extension);
         $this->assertSame('/tmp', \dirname($image));
     }
 
@@ -48,7 +47,7 @@ final class LocalImageTest extends TestCase
      */
     public function can_get_exif_and_iptc_data(): void
     {
-        $image = new LocalImage(__DIR__.'/Fixture/files/metadata.jpg');
+        $image = new Image(__DIR__.'/Fixture/files/metadata.jpg');
 
         $this->assertSame(16, $image->exif()['computed.Height']);
         $this->assertSame('Lorem Ipsum', $image->iptc()['DocumentTitle']);
@@ -59,7 +58,7 @@ final class LocalImageTest extends TestCase
      */
     public function cannot_get_metadata_for_non_image(): void
     {
-        $image = new LocalImage(__FILE__);
+        $image = new Image(__FILE__);
 
         $this->expectException(\RuntimeException::class);
 
@@ -71,7 +70,7 @@ final class LocalImageTest extends TestCase
      */
     public function can_delete_image(): void
     {
-        $image = LocalImage::from('image content');
+        $image = Image::from('image content');
 
         $this->assertFileExists($image);
 
@@ -85,7 +84,7 @@ final class LocalImageTest extends TestCase
      */
     public function can_refresh(): void
     {
-        $image = LocalImage::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
+        $image = Image::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
 
         $this->assertSame('image/jpeg', $image->mimeType());
         $this->assertSame(678, $image->height());

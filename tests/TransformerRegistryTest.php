@@ -5,7 +5,6 @@ namespace Zenstruck\Image\Tests;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Zenstruck\Image;
-use Zenstruck\Image\LocalImage;
 use Zenstruck\Image\Transformer;
 use Zenstruck\Image\TransformerRegistry;
 
@@ -86,7 +85,7 @@ final class TransformerRegistryTest extends TestCase
 
     private function image(): Image
     {
-        return LocalImage::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
+        return Image::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
     }
 }
 
@@ -94,7 +93,7 @@ class MockTransformer implements Transformer
 {
     public function transform(Image $image, object|callable $filter, array $options = []): Image
     {
-        return new LocalImage(__FILE__);
+        return new Image(__FILE__);
     }
 
     public function object(Image $image): object

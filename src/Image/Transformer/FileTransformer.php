@@ -3,7 +3,6 @@
 namespace Zenstruck\Image\Transformer;
 
 use Zenstruck\Image;
-use Zenstruck\Image\LocalImage;
 use Zenstruck\Image\Transformer;
 use Zenstruck\TempFile;
 
@@ -17,11 +16,6 @@ abstract class FileTransformer implements Transformer
 {
     final public function transform(Image $image, callable $filter, array $options = []): Image
     {
-        if (!$image instanceof \SplFileInfo) {
-            throw new \InvalidArgumentException(\sprintf('"%s" only supports images that are instances of \SplFileInfo.', static::class));
-        }
-
-        $image = LocalImage::wrap($image);
         $options['format'] ??= $image->guessExtension();
         $output = $options['output'] ??= TempFile::withExtension($options['format']);
         $options['output'] = (string) $options['output'];
@@ -34,15 +28,11 @@ abstract class FileTransformer implements Transformer
 
         $this->save($transformed, $options);
 
-        return LocalImage::wrap($output);
+        return Image::wrap($output);
     }
 
     final public function object(Image $image): object
     {
-        if (!$image instanceof \SplFileInfo) {
-            throw new \InvalidArgumentException(\sprintf('"%s" only supports images that are instances of \SplFileInfo.', static::class));
-        }
-
         return $this->createObject($image);
     }
 
