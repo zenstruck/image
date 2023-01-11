@@ -23,8 +23,9 @@ use Zenstruck\TempFile;
  */
 abstract class FileTransformer implements Transformer
 {
-    final public function transform(Image $image, callable $filter, array $options = []): Image
+    final public function transform(\SplFileInfo $image, callable $filter, array $options = []): \SplFileInfo
     {
+        $image = Image::wrap($image);
         $options['format'] ??= $image->guessExtension();
         $output = $options['output'] ??= TempFile::withExtension($options['format']);
         $options['output'] = (string) $options['output'];

@@ -14,7 +14,6 @@ namespace Zenstruck\Image\Transformer;
 use Intervention\Image\Image as InterventionImage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\ImageManagerStatic;
-use Zenstruck\Image;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -31,7 +30,7 @@ final class InterventionTransformer extends FileTransformer
         }
     }
 
-    public function object(Image $image): object
+    public function object(\SplFileInfo $image): object
     {
         return $this->manager ? $this->manager->make($image) : ImageManagerStatic::make($image);
     }

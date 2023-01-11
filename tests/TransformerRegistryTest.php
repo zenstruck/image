@@ -100,12 +100,12 @@ final class TransformerRegistryTest extends TestCase
 
 class MockTransformer implements Transformer
 {
-    public function transform(Image $image, object|callable $filter, array $options = []): Image
+    public function transform(\SplFileInfo $image, object|callable $filter, array $options = []): \SplFileInfo
     {
         return new Image(__FILE__);
     }
 
-    public function object(Image $image): object
+    public function object(\SplFileInfo $image): object
     {
         return new \stdClass();
     }

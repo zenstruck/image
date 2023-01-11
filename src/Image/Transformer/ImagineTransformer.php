@@ -19,7 +19,6 @@ use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Imagick\Image as ImagickImage;
 use Imagine\Imagick\Imagine as ImagickImagine;
-use Zenstruck\Image;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -51,7 +50,7 @@ final class ImagineTransformer extends FileTransformer
         };
     }
 
-    public function object(Image $image): object
+    public function object(\SplFileInfo $image): object
     {
         return $this->imagine->open($image);
     }

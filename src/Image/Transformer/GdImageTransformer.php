@@ -11,8 +11,6 @@
 
 namespace Zenstruck\Image\Transformer;
 
-use Zenstruck\Image;
-
 /**
  * @author Jakub Caban <kuba.iluvatar@gmail.com>
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -28,7 +26,7 @@ final class GdImageTransformer extends FileTransformer
         }
     }
 
-    public function object(Image $image): object
+    public function object(\SplFileInfo $image): object
     {
         return @\imagecreatefromstring(\file_get_contents($image) ?: throw new \RuntimeException(\sprintf('Unable to read "%s".', $image))) ?: throw new \RuntimeException(\sprintf('Unable to create GdImage for "%s".', $image));
     }
