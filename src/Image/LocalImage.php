@@ -75,11 +75,6 @@ final class LocalImage extends \SplFileInfo implements Image
         return self::transformerRegistry()->get($class)->object($this);
     }
 
-    public function blurHash(): BlurHash
-    {
-        return new BlurHash($this);
-    }
-
     public function height(): int
     {
         return $this->imageMetadata()[1];

@@ -167,38 +167,3 @@ use Imagine\Image\ImageInterface;
 $image->transformer(ImageInterface::class); // ImageInterface object for this image
 $image->transformer(\Imagick::class); // \Imagick object for this image
 ```
-
-### BlurHash
-
-> **Warning**: Generating BlurHash strings is resource intensive. It is recommended to
-> use some kind of cache if possible.
-
-You can create [BlurHash](https://blurha.sh/) strings for your image:
-
-```php
-/** @var Zenstruck\Image\LocalImage $image */
-
-(string) $image->blurHash(); // string (ie "LKN]Rv%2Tw=w]~RBVZRi};RPxuwH")
-
-// customize the encoding
-$image->blurHash()->encode(['width' => 100, 'height' => 100]); // string
-```
-
-#### BlurHash DataUri
-
-If your frontend does not have the JS support for decoding blurhash strings, you
-can generate a data-uri to use in your `<img src="...">` attributes.
-
-```php
-/** @var Zenstruck\Image\LocalImage $image */
-
-$image->blurHash()->dataUri() // string - "data:image/jpeg;base64,...";
-
-// create an img tag
-$tag = \sprintf(
-    '<img src="%s" height="%s" width="%s" />',
-    $image->blurHash()->dataUri(),
-    $image->height(),
-    $image->width()
-);
-```

@@ -2,8 +2,6 @@
 
 namespace Zenstruck;
 
-use Zenstruck\Image\BlurHash;
-
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
@@ -24,8 +22,6 @@ interface Image
      * @return T
      */
     public function transformer(string $class): object;
-
-    public function blurHash(): BlurHash;
 
     public function height(): int;
 
