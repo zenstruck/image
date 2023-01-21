@@ -1,5 +1,8 @@
 # zenstruck/image
 
+[![CI Status](https://github.com/zenstruck/image/workflows/CI/badge.svg)](https://github.com/zenstruck/image/actions?query=workflow%3ACI)
+[![codecov](https://codecov.io/gh/zenstruck/image/branch/1.x/graph/badge.svg?token=MBKSCPO6U5)](https://codecov.io/gh/zenstruck/image)
+
 Image file wrapper to provide image-specific metadata and transformations.
 
 ## Installation
