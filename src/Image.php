@@ -11,7 +11,7 @@
 
 namespace Zenstruck;
 
-use Zenstruck\Image\CalculatedProperties;
+use Zenstruck\Image\Dimensions;
 use Zenstruck\Image\TransformerRegistry;
 
 /**
@@ -19,8 +19,6 @@ use Zenstruck\Image\TransformerRegistry;
  */
 final class Image extends \SplFileInfo
 {
-    use CalculatedProperties;
-
     private const MIME_EXTENSION_MAP = [
         'image/jpeg' => 'jpg',
         'image/gif' => 'gif',
@@ -35,6 +33,8 @@ final class Image extends \SplFileInfo
 
     /** @var mixed[] */
     private array $imageMetadata;
+
+    private Dimensions $dimensions;
 
     /** @var array<string,string> */
     private array $iptc;
@@ -87,14 +87,9 @@ final class Image extends \SplFileInfo
         return self::transformerRegistry()->get($class)->object($this);
     }
 
-    public function height(): int
+    public function dimensions(): Dimensions
     {
-        return $this->imageMetadata()[1];
-    }
-
-    public function width(): int
-    {
-        return $this->imageMetadata()[0];
+        return $this->dimensions ??= new Dimensions(fn() => $this->imageMetadata()); // @phpstan-ignore-line
     }
 
     public function mimeType(): string
@@ -195,7 +190,7 @@ final class Image extends \SplFileInfo
     {
         \clearstatcache(filename: $this);
 
-        unset($this->imageMetadata, $this->exif, $this->iptc);
+        unset($this->imageMetadata, $this->exif, $this->iptc, $this->dimensions);
 
         return $this;
     }

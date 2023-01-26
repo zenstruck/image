@@ -21,14 +21,16 @@ use Zenstruck\Image;
 $image = Image::wrap('some/local.jpg'); // create from local file
 $image = Image::from($resource); // create from resource/stream (in a temp file)
 
-// general metadata
-$image->height(); // int
-$image->width(); // int
-$image->aspectRatio(); // float
-$image->pixels(); // int
-$image->isSquare(); // bool
-$image->isLandscape(); // bool
-$image->isPortrait(); // bool
+// dimensional information
+$image->dimensions()->height(); // int
+$image->dimensions()->width(); // int
+$image->dimensions()->aspectRatio(); // float
+$image->dimensions()->pixels(); // int
+$image->dimensions()->isSquare(); // bool
+$image->dimensions()->isLandscape(); // bool
+$image->dimensions()->isPortrait(); // bool
+
+// other metadata
 $image->mimeType(); // string (ie "image/jpeg")
 $image->guessExtension(); // string - the extension if available or guess from mime-type
 $image->iptc(); // array - IPTC data (if the image supports)

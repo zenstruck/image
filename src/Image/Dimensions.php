@@ -14,8 +14,25 @@ namespace Zenstruck\Image;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-trait CalculatedProperties
+final class Dimensions
 {
+    /**
+     * @param array{0:int,1:int}|callable():array{0:int,1:int} $values
+     */
+    public function __construct(private $values)
+    {
+    }
+
+    public function width(): int
+    {
+        return $this->values()[0];
+    }
+
+    public function height(): int
+    {
+        return $this->values()[1];
+    }
+
     public function aspectRatio(): float
     {
         return $this->width() / $this->height();
@@ -39,5 +56,17 @@ trait CalculatedProperties
     public function isLandscape(): bool
     {
         return $this->width() > $this->height();
+    }
+
+    /**
+     * @return array{0:int,1:int}
+     */
+    private function values(): array
+    {
+        if (\is_callable($this->values)) {
+            return $this->values = ($this->values)();
+        }
+
+        return $this->values;
     }
 }

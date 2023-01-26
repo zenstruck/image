@@ -71,7 +71,7 @@ final class ImageTest extends TestCase
 
         $this->expectException(\RuntimeException::class);
 
-        $image->height();
+        $image->dimensions()->height();
     }
 
     /**
@@ -96,37 +96,37 @@ final class ImageTest extends TestCase
         $image = Image::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
 
         $this->assertSame('image/jpeg', $image->mimeType());
-        $this->assertSame(678, $image->height());
-        $this->assertSame(563, $image->width());
+        $this->assertSame(678, $image->dimensions()->height());
+        $this->assertSame(563, $image->dimensions()->width());
         $this->assertSame([], $image->iptc());
         $this->assertSame(678, $image->exif()['computed.Height']);
 
         \file_put_contents($image, \file_get_contents(__DIR__.'/Fixture/files/metadata.jpg'));
 
         $this->assertSame('image/jpeg', $image->mimeType());
-        $this->assertSame(678, $image->height());
-        $this->assertSame(563, $image->width());
+        $this->assertSame(678, $image->dimensions()->height());
+        $this->assertSame(563, $image->dimensions()->width());
         $this->assertSame([], $image->iptc());
         $this->assertSame(678, $image->exif()['computed.Height']);
 
         $this->assertSame($image, $image->refresh());
 
         $this->assertSame('image/jpeg', $image->mimeType());
-        $this->assertSame(16, $image->height());
-        $this->assertSame(16, $image->width());
+        $this->assertSame(16, $image->dimensions()->height());
+        $this->assertSame(16, $image->dimensions()->width());
         $this->assertSame('Lorem Ipsum', $image->iptc()['DocumentTitle']);
         $this->assertSame(16, $image->exif()['computed.Height']);
     }
 
     private function metadataAssertions(Image $image, int $height, int $width, string $mime, string $extension): void
     {
-        $this->assertSame($height, $image->height());
-        $this->assertSame($width, $image->width());
-        $this->assertSame($width * $height, $image->pixels());
-        $this->assertSame($width / $height, $image->aspectRatio());
-        $this->assertSame($height === $width, $image->isSquare());
-        $this->assertSame($height < $width, $image->isLandscape());
-        $this->assertSame($height > $width, $image->isPortrait());
+        $this->assertSame($height, $image->dimensions()->height());
+        $this->assertSame($width, $image->dimensions()->width());
+        $this->assertSame($width * $height, $image->dimensions()->pixels());
+        $this->assertSame($width / $height, $image->dimensions()->aspectRatio());
+        $this->assertSame($height === $width, $image->dimensions()->isSquare());
+        $this->assertSame($height < $width, $image->dimensions()->isLandscape());
+        $this->assertSame($height > $width, $image->dimensions()->isPortrait());
         $this->assertSame($mime, $image->mimeType());
         $this->assertSame($extension, $image->guessExtension());
     }
