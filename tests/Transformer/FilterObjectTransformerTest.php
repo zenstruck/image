@@ -29,15 +29,15 @@ abstract class FilterObjectTransformerTest extends TransformerTest
 
         $resized = $image->transform($this->filterCallback());
 
-        $this->assertSame(100, $resized->width());
-        $this->assertSame(120, $resized->height());
+        $this->assertSame(100, $resized->dimensions()->width());
+        $this->assertSame(120, $resized->dimensions()->height());
         $this->assertSame('jpg', $resized->getExtension());
         $this->assertSame('/tmp', \dirname($resized));
 
         $resized = $image->transform($this->filterObject(), ['format' => 'png']);
 
-        $this->assertSame(100, $resized->width());
-        $this->assertSame(120, $resized->height());
+        $this->assertSame(100, $resized->dimensions()->width());
+        $this->assertSame(120, $resized->dimensions()->height());
         $this->assertSame('png', $resized->getExtension());
         $this->assertSame('/tmp', \dirname($resized));
     }
@@ -53,8 +53,8 @@ abstract class FilterObjectTransformerTest extends TransformerTest
         $resized = $image->transform($this->filterObject(), ['output' => $output]);
 
         $this->assertSame((string) $output, (string) $resized);
-        $this->assertSame(100, $resized->width());
-        $this->assertSame(120, $resized->height());
+        $this->assertSame(100, $resized->dimensions()->width());
+        $this->assertSame(120, $resized->dimensions()->height());
         $this->assertSame('image/jpeg', $resized->mimeType());
     }
 
@@ -65,17 +65,17 @@ abstract class FilterObjectTransformerTest extends TransformerTest
     {
         $image = Image::from(new \SplFileInfo(__DIR__.'/../Fixture/files/symfony.jpg'));
 
-        $this->assertSame(678, $image->height());
-        $this->assertSame(563, $image->width());
+        $this->assertSame(678, $image->dimensions()->height());
+        $this->assertSame(563, $image->dimensions()->width());
 
         $resized = $image->transformInPlace($this->filterObject());
 
         $this->assertSame($image, $resized);
         $this->assertSame((string) $image, (string) $resized);
-        $this->assertSame(100, $resized->width());
-        $this->assertSame(120, $resized->height());
-        $this->assertSame(100, $image->width());
-        $this->assertSame(120, $image->height());
+        $this->assertSame(100, $resized->dimensions()->width());
+        $this->assertSame(120, $resized->dimensions()->height());
+        $this->assertSame(100, $image->dimensions()->width());
+        $this->assertSame(120, $image->dimensions()->height());
     }
 
     abstract protected function filterObject(): object;
