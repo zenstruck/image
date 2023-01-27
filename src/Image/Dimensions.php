@@ -16,22 +16,14 @@ namespace Zenstruck\Image;
  */
 final class Dimensions implements \JsonSerializable
 {
+    /** @var array{0:int,1:int} */
+    private array $normalizedValues;
+
     /**
-     * @param array{0:int,1:int}|callable():array{0:int,1:int} $values
+     * @param array{0:int,1:int}|array{width:int,height:int}|callable():(array{0:int,1:int}|array{width:int,height:int}) $values
      */
     public function __construct(private $values)
     {
-    }
-
-    /**
-     * @param array{0:int,1:int}|array{width:int,height:int} $values
-     */
-    public static function fromArray(array $values): self
-    {
-        return new self([
-            $values['width'] ?? $values[0] ?? throw new \InvalidArgumentException('Could not determine width.'),
-            $values['height'] ?? $values[1] ?? throw new \InvalidArgumentException('Could not determine height.'),
-        ]);
     }
 
     public function jsonSerialize(): array
@@ -82,10 +74,17 @@ final class Dimensions implements \JsonSerializable
      */
     private function values(): array
     {
-        if (\is_callable($this->values)) {
-            return $this->values = ($this->values)();
+        if (isset($this->normalizedValues)) {
+            return $this->normalizedValues;
         }
 
-        return $this->values;
+        if (\is_callable($this->values)) {
+            $this->values = ($this->values)();
+        }
+
+        return $this->normalizedValues = [
+            $this->values['width'] ?? $this->values[0] ?? throw new \InvalidArgumentException('Could not determine width.'),
+            $this->values['height'] ?? $this->values[1] ?? throw new \InvalidArgumentException('Could not determine height.'),
+        ];
     }
 }
