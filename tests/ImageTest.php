@@ -122,6 +122,7 @@ final class ImageTest extends TestCase
     {
         $this->assertSame($height, $image->dimensions()->height());
         $this->assertSame($width, $image->dimensions()->width());
+        $this->assertSame(['width' => $width, 'height' => $height], $image->dimensions()->jsonSerialize());
         $this->assertSame($width * $height, $image->dimensions()->pixels());
         $this->assertSame($width / $height, $image->dimensions()->aspectRatio());
         $this->assertSame($height === $width, $image->dimensions()->isSquare());

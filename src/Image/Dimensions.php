@@ -14,13 +14,32 @@ namespace Zenstruck\Image;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class Dimensions
+final class Dimensions implements \JsonSerializable
 {
     /**
      * @param array{0:int,1:int}|callable():array{0:int,1:int} $values
      */
     public function __construct(private $values)
     {
+    }
+
+    /**
+     * @param array{0:int,1:int}|array{width:int,height:int} $values
+     */
+    public static function fromArray(array $values): self
+    {
+        return new self([
+            $values['width'] ?? $values[0] ?? throw new \InvalidArgumentException('Could not determine width.'),
+            $values['height'] ?? $values[1] ?? throw new \InvalidArgumentException('Could not determine height.'),
+        ]);
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'width' => $this->width(),
+            'height' => $this->height(),
+        ];
     }
 
     public function width(): int
