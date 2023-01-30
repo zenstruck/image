@@ -117,7 +117,7 @@ final class Image extends \SplFileInfo
         }
 
         if (false === $data = @\exif_read_data($this, as_arrays: true)) {
-            throw new \RuntimeException(\sprintf('Unable to parse EXIF data for "%s".', $this));
+            return $this->exif = [];
         }
 
         $ret = [];
@@ -156,7 +156,7 @@ final class Image extends \SplFileInfo
         }
 
         if (false === $iptc = \iptcparse($info['APP13'])) {
-            throw new \RuntimeException(\sprintf('Unable to parse IPTC data for "%s".', $this));
+            return $this->iptc = [];
         }
 
         return $this->iptc = \array_filter([
