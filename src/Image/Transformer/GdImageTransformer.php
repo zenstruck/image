@@ -15,6 +15,8 @@ namespace Zenstruck\Image\Transformer;
  * @author Jakub Caban <kuba.iluvatar@gmail.com>
  * @author Kevin Bond <kevinbond@gmail.com>
  *
+ * @internal
+ *
  * @extends FileTransformer<\GdImage>
  */
 final class GdImageTransformer extends FileTransformer

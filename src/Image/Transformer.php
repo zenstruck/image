@@ -14,6 +14,8 @@ namespace Zenstruck\Image;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
+ * @internal
+ *
  * @template T of object
  */
 interface Transformer

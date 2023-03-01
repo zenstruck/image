@@ -23,6 +23,8 @@ use Imagine\Imagick\Imagine as ImagickImagine;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
+ * @internal
+ *
  * @extends FileTransformer<ImageInterface>
  */
 final class ImagineTransformer extends FileTransformer

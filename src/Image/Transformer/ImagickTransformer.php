@@ -15,6 +15,8 @@ namespace Zenstruck\Image\Transformer;
  * @author Kevin Bond <kevinbond@gmail.com>
  * @author Jakub Caban <kuba.iluvatar@gmail.com>
  *
+ * @internal
+ *
  * @extends FileTransformer<\Imagick>
  */
 final class ImagickTransformer extends FileTransformer

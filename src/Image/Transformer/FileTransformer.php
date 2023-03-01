@@ -18,6 +18,8 @@ use Zenstruck\TempFile;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
+ * @internal
+ *
  * @template T of object
  * @implements Transformer<T>
  */

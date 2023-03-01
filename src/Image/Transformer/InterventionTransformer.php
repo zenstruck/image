@@ -19,6 +19,8 @@ use Intervention\Image\ImageManagerStatic;
  * @author Kevin Bond <kevinbond@gmail.com>
  * @author Jakub Caban <kuba.iluvatar@gmail.com>
  *
+ * @internal
+ *
  * @extends FileTransformer<InterventionImage>
  */
 final class InterventionTransformer extends FileTransformer
