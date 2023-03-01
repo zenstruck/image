@@ -37,9 +37,4 @@ final class GdImageTransformerTest extends TransformerTest
     {
         return fn(\GdImage $i) => null;
     }
-
-    protected function objectClass(): string
-    {
-        return \GdImage::class;
-    }
 }

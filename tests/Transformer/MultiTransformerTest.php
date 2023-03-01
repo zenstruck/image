@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Zenstruck\Image\Tests;
+namespace Zenstruck\Image\Tests\Transformer;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Zenstruck\Image;
 use Zenstruck\Image\Transformer;
-use Zenstruck\Image\TransformerRegistry;
+use Zenstruck\Image\Transformer\MultiTransformer;
+use Zenstruck\ImageFileInfo;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class TransformerRegistryTest extends TestCase
+final class MultiTransformerTest extends TestCase
 {
     /**
      * @test
@@ -67,7 +67,7 @@ final class TransformerRegistryTest extends TestCase
      */
     public function can_provide_transformers_as_array(): void
     {
-        $transformer = new TransformerRegistry([
+        $transformer = new MultiTransformer([
             \stdClass::class => new MockTransformer(),
         ]);
 
@@ -85,16 +85,16 @@ final class TransformerRegistryTest extends TestCase
         $container->expects($this->once())->method('has')->with(\stdClass::class)->willReturn(true);
         $container->expects($this->once())->method('get')->with(\stdClass::class)->willReturn(new MockTransformer());
 
-        $transformer = new TransformerRegistry($container);
+        $transformer = new MultiTransformer($container);
 
         $resized = $transformer->transform($this->image(), fn(\stdClass $c) => null);
 
         $this->assertSame(__FILE__, (string) $resized);
     }
 
-    private function image(): Image
+    private function image(): ImageFileInfo
     {
-        return Image::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
+        return ImageFileInfo::from(new \SplFileInfo(__DIR__.'/../Fixture/files/symfony.jpg'));
     }
 }
 
@@ -102,11 +102,6 @@ class MockTransformer implements Transformer
 {
     public function transform(\SplFileInfo $image, object|callable $filter, array $options = []): \SplFileInfo
     {
-        return new Image(__FILE__);
-    }
-
-    public function object(\SplFileInfo $image): object
-    {
-        return new \stdClass();
+        return new ImageFileInfo(__FILE__);
     }
 }

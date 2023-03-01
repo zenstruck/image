@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Zenstruck\Image;
+namespace Zenstruck\Image\Transformer;
 
 use Imagine\Filter\FilterInterface as ImagineFilter;
 use Imagine\Gd\Image as GdImagineImage;
@@ -19,15 +19,16 @@ use Imagine\Imagick\Image as ImagickImagineImage;
 use Intervention\Image\Filters\FilterInterface as InterventionFilter;
 use Intervention\Image\Image as InterventionImage;
 use Psr\Container\ContainerInterface;
-use Zenstruck\Image\Transformer\GdImageTransformer;
-use Zenstruck\Image\Transformer\ImagickTransformer;
-use Zenstruck\Image\Transformer\ImagineTransformer;
-use Zenstruck\Image\Transformer\InterventionTransformer;
+use Zenstruck\Image\Transformer;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
+ *
+ * @internal
+ *
+ * @implements Transformer<object>
  */
-final class TransformerRegistry
+final class MultiTransformer implements Transformer
 {
     /** @var array<class-string,Transformer<object>> */
     private static array $defaultTransformers = [];
@@ -39,22 +40,14 @@ final class TransformerRegistry
     {
     }
 
-    public function transform(\SplFileInfo $image, object|callable $filter, array $options = []): \SplFileInfo
+    public function transform(\SplFileInfo $image, callable|object $filter, array $options = []): \SplFileInfo
     {
         if ($filter instanceof ImagineFilter) {
-            return $this->get(ImagineImage::class)->transform(
-                $image,
-                static fn(ImagineImage $i) => $filter->apply($i),
-                $options
-            );
+            return $this->get(ImagineImage::class)->transform($image, $filter, $options);
         }
 
         if ($filter instanceof InterventionFilter) {
-            return $this->get(InterventionImage::class)->transform(
-                $image,
-                static fn(InterventionImage $i) => $i->filter($filter),
-                $options
-            );
+            return $this->get(InterventionImage::class)->transform($image, $filter, $options);
         }
 
         if (!\is_callable($filter)) {
@@ -84,7 +77,7 @@ final class TransformerRegistry
      *
      * @return Transformer<T>
      */
-    public function get(string $class): Transformer
+    private function get(string $class): Transformer
     {
         if (\is_array($this->transformers) && isset($this->transformers[$class])) {
             return $this->transformers[$class]; // @phpstan-ignore-line

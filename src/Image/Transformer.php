@@ -14,17 +14,14 @@ namespace Zenstruck\Image;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  *
+ * @internal
+ *
  * @template T of object
  */
 interface Transformer
 {
     /**
-     * @param callable(T):T $filter
+     * @param object|callable(T):T $filter
      */
-    public function transform(\SplFileInfo $image, callable $filter, array $options = []): \SplFileInfo;
-
-    /**
-     * @return T
-     */
-    public function object(\SplFileInfo $image): object;
+    public function transform(\SplFileInfo $image, callable|object $filter, array $options = []): \SplFileInfo;
 }

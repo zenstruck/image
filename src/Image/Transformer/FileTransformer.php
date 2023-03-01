@@ -11,21 +11,24 @@
 
 namespace Zenstruck\Image\Transformer;
 
-use Zenstruck\Image;
 use Zenstruck\Image\Transformer;
+use Zenstruck\ImageFileInfo;
 use Zenstruck\TempFile;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
+ *
+ * @internal
  *
  * @template T of object
  * @implements Transformer<T>
  */
 abstract class FileTransformer implements Transformer
 {
-    final public function transform(\SplFileInfo $image, callable $filter, array $options = []): \SplFileInfo
+    final public function transform(\SplFileInfo $image, callable|object $filter, array $options = []): \SplFileInfo
     {
-        $image = Image::wrap($image);
+        $filter = static::normalizeFilter($filter);
+        $image = ImageFileInfo::wrap($image);
         $options['format'] ??= $image->guessExtension();
         $output = $options['output'] ??= TempFile::withExtension($options['format']);
         $options['output'] = (string) $options['output'];
@@ -38,8 +41,23 @@ abstract class FileTransformer implements Transformer
 
         $this->save($transformed, $options);
 
-        return Image::wrap($output);
+        return ImageFileInfo::wrap($output);
     }
+
+    /**
+     * @param object|callable(T):T $filter
+     *
+     * @return callable(T):T
+     */
+    public static function normalizeFilter(callable|object $filter): callable
+    {
+        return \is_callable($filter) ? $filter : throw new \InvalidArgumentException(\sprintf('"%s" does not support "%s".', self::class, $filter::class));
+    }
+
+    /**
+     * @return T
+     */
+    abstract protected function object(\SplFileInfo $image): object;
 
     /**
      * @return class-string<T>

@@ -11,6 +11,7 @@
 
 namespace Zenstruck\Image\Transformer;
 
+use Intervention\Image\Filters\FilterInterface;
 use Intervention\Image\Image as InterventionImage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\ImageManagerStatic;
@@ -18,6 +19,8 @@ use Intervention\Image\ImageManagerStatic;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  * @author Jakub Caban <kuba.iluvatar@gmail.com>
+ *
+ * @internal
  *
  * @extends FileTransformer<InterventionImage>
  */
@@ -30,7 +33,16 @@ final class InterventionTransformer extends FileTransformer
         }
     }
 
-    public function object(\SplFileInfo $image): object
+    public static function normalizeFilter(callable|object $filter): callable
+    {
+        if ($filter instanceof FilterInterface) {
+            $filter = static fn(InterventionImage $i) => $i->filter($filter);
+        }
+
+        return parent::normalizeFilter($filter);
+    }
+
+    protected function object(\SplFileInfo $image): object
     {
         return $this->manager ? $this->manager->make($image) : ImageManagerStatic::make($image);
     }

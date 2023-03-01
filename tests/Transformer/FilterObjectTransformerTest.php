@@ -11,8 +11,8 @@
 
 namespace Zenstruck\Image\Tests\Transformer;
 
-use Zenstruck\Image;
 use Zenstruck\Image\Tests\TransformerTest;
+use Zenstruck\ImageFileInfo;
 use Zenstruck\TempFile;
 
 /**
@@ -25,7 +25,7 @@ abstract class FilterObjectTransformerTest extends TransformerTest
      */
     public function can_transform_into_temp_image_with_filter_object(): void
     {
-        $image = new Image(__DIR__.'/../Fixture/files/symfony.jpg');
+        $image = new ImageFileInfo(__DIR__.'/../Fixture/files/symfony.jpg');
 
         $resized = $image->transform($this->filterCallback());
 
@@ -48,7 +48,7 @@ abstract class FilterObjectTransformerTest extends TransformerTest
     public function can_transform_to_specific_file_with_filter_object(): void
     {
         $output = TempFile::new();
-        $image = new Image(__DIR__.'/../Fixture/files/symfony.jpg');
+        $image = new ImageFileInfo(__DIR__.'/../Fixture/files/symfony.jpg');
 
         $resized = $image->transform($this->filterObject(), ['output' => $output]);
 
@@ -63,7 +63,7 @@ abstract class FilterObjectTransformerTest extends TransformerTest
      */
     public function can_transform_in_place_with_filter_object(): void
     {
-        $image = Image::from(new \SplFileInfo(__DIR__.'/../Fixture/files/symfony.jpg'));
+        $image = ImageFileInfo::from(new \SplFileInfo(__DIR__.'/../Fixture/files/symfony.jpg'));
 
         $this->assertSame(678, $image->dimensions()->height());
         $this->assertSame(563, $image->dimensions()->width());

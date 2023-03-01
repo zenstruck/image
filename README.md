@@ -13,13 +13,13 @@ composer require zenstruck/image
 
 ## Usage
 
-> **Note**: `Zenstruck\Image` extends `\SplFileInfo`.
+> **Note**: `Zenstruck\ImageFileInfo` extends `\SplFileInfo`.
 
 ```php
-use Zenstruck\Image;
+use Zenstruck\ImageFileInfo;
 
-$image = Image::wrap('some/local.jpg'); // create from local file
-$image = Image::from($resource); // create from resource/stream (in a temp file)
+$image = ImageFileInfo::wrap('some/local.jpg'); // create from local file
+$image = ImageFileInfo::from($resource); // create from resource/stream (in a temp file)
 
 // dimensional information
 $image->dimensions()->height(); // int
@@ -44,7 +44,7 @@ $image->delete(); // void - delete the image file
 $image->getMTime();
 ```
 
-> **Note**: images created with `Image::from()` are created in unique temporary files
+> **Note**: images created with `ImageFileInfo::from()` are created in unique temporary files
 > and deleted at the end of the script.
 
 ### Transformations
@@ -57,7 +57,7 @@ The following transformers are available:
 - [imagine\imagine](https://github.com/php-imagine/Imagine)
 
 To use the desired transformer, type-hint the first parameter of the callable
-passed to `Zenstruck\Image::transform()` with the desired transformer's
+passed to `Zenstruck\ImageFileInfo::transform()` with the desired transformer's
 _image object_:
 
 - **GD**: `\GdImage`
@@ -70,13 +70,13 @@ _image object_:
 The following example uses `\GdImage` but any of the above type-hints can be used.
 
 ```php
-/** @var Zenstruck\Image $image */
+/** @var Zenstruck\ImageFileInfo $image */
 
 $resized = $image->transform(function(\GdImage $image): \GdImage {
     // perform desired manipulations...
 
     return $image;
-}); // a new temporary Zenstruck\Image instance (deleted at the end of the script)
+}); // a new temporary Zenstruck\ImageFileInfo instance (deleted at the end of the script)
 
 // configure the format
 $resized = $image->transform(
@@ -102,7 +102,7 @@ $resized = $image->transform(
 #### Transform "In Place"
 
 ```php
-/** @var Zenstruck\Image $image */
+/** @var Zenstruck\ImageFileInfo $image */
 
 $resized = $image->transformInPlace(function(\GdImage $image): \GdImage {
     // perform desired manipulations...
@@ -119,7 +119,7 @@ that can be passed directly to `transform()` and `transformInPlace()`:
 ```php
 /** @var Imagine\Filter\FilterInterface $imagineFilter */
 /** @var Intervention\Image\Filters\FilterInterface $interventionFilter */
-/** @var Zenstruck\Image $image */
+/** @var Zenstruck\ImageFileInfo $image */
 
 $transformed = $image->transform($imagineFilter);
 $transformed = $image->transform($interventionFilter);
@@ -152,23 +152,9 @@ class GreyscaleThumbnail
 To use, pass a new instance to `transform()` or `transformInPlace()`:
 
 ```php
-/** @var Zenstruck\Image $image */
+/** @var Zenstruck\ImageFileInfo $image */
 
 $thumbnail = $image->transform(new GreyscaleThumbnail(200, 200));
 
 $image->transformInPlace(new GreyscaleThumbnail(200, 200));
-```
-
-#### Transformation Object
-
-`Zenstruck\Image::transformer()` returns a new instance of the desired
-transformation library's _image object_:
-
-```php
-use Imagine\Image\ImageInterface;
-
-/** @var Zenstruck\Image $image */
-
-$image->transformer(ImageInterface::class); // ImageInterface object for this image
-$image->transformer(\Imagick::class); // \Imagick object for this image
 ```

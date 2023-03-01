@@ -12,12 +12,13 @@
 namespace Zenstruck;
 
 use Zenstruck\Image\Dimensions;
-use Zenstruck\Image\TransformerRegistry;
+use Zenstruck\Image\Transformer;
+use Zenstruck\Image\Transformer\MultiTransformer;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class Image extends \SplFileInfo
+final class ImageFileInfo extends \SplFileInfo
 {
     private const MIME_EXTENSION_MAP = [
         'image/jpeg' => 'jpg',
@@ -29,9 +30,10 @@ final class Image extends \SplFileInfo
         'image/vnd.wap.wbmp' => 'wbmp',
     ];
 
-    private static TransformerRegistry $transformerRegistry;
+    /** @var Transformer<object> */
+    private static Transformer $transformer;
 
-    /** @var mixed[] */
+    /** @var array{0:int,1:int,mime?:string,APP13?:string} */
     private array $imageMetadata;
 
     private Dimensions $dimensions;
@@ -57,39 +59,27 @@ final class Image extends \SplFileInfo
         return new self(TempFile::for($what));
     }
 
+    /**
+     * @param object|callable(object):object $filter
+     */
     public function transform(object|callable $filter, array $options = []): self
     {
-        /** @var self $transformed */
-        $transformed = self::transformerRegistry()->transform($this, $filter, $options);
+        $transformed = self::transformer()->transform($this, $filter, $options);
 
-        return $transformed->refresh();
+        return $transformed instanceof self ? $transformed->refresh() : new self($transformed);
     }
 
     /**
-     * @template T of object
-     *
-     * @param object|callable(T):T $filter
+     * @param object|callable(object):object $filter
      */
     public function transformInPlace(object|callable $filter, array $options = []): self
     {
         return $this->transform($filter, \array_merge($options, ['output' => $this]));
     }
 
-    /**
-     * @template T of object
-     *
-     * @param class-string<T> $class
-     *
-     * @return T
-     */
-    public function transformer(string $class): object
-    {
-        return self::transformerRegistry()->get($class)->object($this);
-    }
-
     public function dimensions(): Dimensions
     {
-        return $this->dimensions ??= new Dimensions(fn() => $this->imageMetadata()); // @phpstan-ignore-line
+        return $this->dimensions ??= new Dimensions(fn() => $this->imageMetadata());
     }
 
     public function mimeType(): string
@@ -202,13 +192,16 @@ final class Image extends \SplFileInfo
         }
     }
 
-    private static function transformerRegistry(): TransformerRegistry
+    /**
+     * @return Transformer<object>
+     */
+    private static function transformer(): Transformer
     {
-        return self::$transformerRegistry ??= new TransformerRegistry();
+        return self::$transformer ??= new MultiTransformer();
     }
 
     /**
-     * @return mixed[]
+     * @return array{0:int,1:int,mime?:string,APP13?:string}
      */
     private function imageMetadata(): array
     {
@@ -227,11 +220,11 @@ final class Image extends \SplFileInfo
             return $this->imageMetadata = self::parseSvg($this) ?? throw new \RuntimeException(\sprintf('Unable to parse image metadata for "%s".', $this));
         }
 
-        return $this->imageMetadata = \array_merge($imageMetadata, $info);
+        return $this->imageMetadata = \array_merge($imageMetadata, $info); // @phpstan-ignore-line
     }
 
     /**
-     * @return null|mixed[]
+     * @return null|array{0:int,1:int,mime:string}
      */
     private static function parseSvg(\SplFileInfo $file): ?array
     {
