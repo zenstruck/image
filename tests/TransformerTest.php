@@ -12,7 +12,7 @@
 namespace Zenstruck\Image\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Zenstruck\Image;
+use Zenstruck\ImageFileInfo;
 use Zenstruck\TempFile;
 
 /**
@@ -25,7 +25,7 @@ abstract class TransformerTest extends TestCase
      */
     public function can_transform_into_temp_image(): void
     {
-        $image = new Image(__DIR__.'/Fixture/files/symfony.jpg');
+        $image = new ImageFileInfo(__DIR__.'/Fixture/files/symfony.jpg');
 
         $resized = $image->transform($this->filterCallback());
 
@@ -48,7 +48,7 @@ abstract class TransformerTest extends TestCase
     public function can_transform_to_specific_file(): void
     {
         $output = TempFile::new();
-        $image = new Image(__DIR__.'/Fixture/files/symfony.jpg');
+        $image = new ImageFileInfo(__DIR__.'/Fixture/files/symfony.jpg');
 
         $resized = $image->transform($this->filterCallback(), ['output' => $output]);
 
@@ -63,7 +63,7 @@ abstract class TransformerTest extends TestCase
      */
     public function can_transform_in_place(): void
     {
-        $image = Image::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
+        $image = ImageFileInfo::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
 
         $this->assertSame(678, $image->dimensions()->height());
         $this->assertSame(563, $image->dimensions()->width());
@@ -83,7 +83,7 @@ abstract class TransformerTest extends TestCase
      */
     public function can_transform_into_temp_image_with_invokable_object(): void
     {
-        $image = new Image(__DIR__.'/Fixture/files/symfony.jpg');
+        $image = new ImageFileInfo(__DIR__.'/Fixture/files/symfony.jpg');
 
         $resized = $image->transform($this->filterInvokable());
 
@@ -106,7 +106,7 @@ abstract class TransformerTest extends TestCase
     public function can_transform_to_specific_file_with_invokable_object(): void
     {
         $output = TempFile::new();
-        $image = new Image(__DIR__.'/Fixture/files/symfony.jpg');
+        $image = new ImageFileInfo(__DIR__.'/Fixture/files/symfony.jpg');
 
         $resized = $image->transform($this->filterInvokable(), ['output' => $output]);
 
@@ -121,7 +121,7 @@ abstract class TransformerTest extends TestCase
      */
     public function can_transform_in_place_with_invokable_object(): void
     {
-        $image = Image::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
+        $image = ImageFileInfo::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
 
         $this->assertSame(678, $image->dimensions()->height());
         $this->assertSame(563, $image->dimensions()->width());
@@ -141,7 +141,7 @@ abstract class TransformerTest extends TestCase
      */
     public function filter_callback_must_return_proper_object(): void
     {
-        $image = new Image(__DIR__.'/Fixture/files/symfony.jpg');
+        $image = new ImageFileInfo(__DIR__.'/Fixture/files/symfony.jpg');
 
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Filter callback must return');
@@ -154,7 +154,7 @@ abstract class TransformerTest extends TestCase
      */
     public function can_get_transformer_object(): void
     {
-        $image = new Image(__DIR__.'/Fixture/files/symfony.jpg');
+        $image = new ImageFileInfo(__DIR__.'/Fixture/files/symfony.jpg');
 
         $this->assertInstanceOf($this->objectClass(), $image->transformer($this->objectClass()));
     }

@@ -17,7 +17,7 @@ use Zenstruck\Image\TransformerRegistry;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class Image extends \SplFileInfo
+final class ImageFileInfo extends \SplFileInfo
 {
     private const MIME_EXTENSION_MAP = [
         'image/jpeg' => 'jpg',

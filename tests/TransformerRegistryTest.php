@@ -13,9 +13,9 @@ namespace Zenstruck\Image\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Zenstruck\Image;
 use Zenstruck\Image\Transformer;
 use Zenstruck\Image\TransformerRegistry;
+use Zenstruck\ImageFileInfo;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -92,9 +92,9 @@ final class TransformerRegistryTest extends TestCase
         $this->assertSame(__FILE__, (string) $resized);
     }
 
-    private function image(): Image
+    private function image(): ImageFileInfo
     {
-        return Image::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
+        return ImageFileInfo::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
     }
 }
 
@@ -102,7 +102,7 @@ class MockTransformer implements Transformer
 {
     public function transform(\SplFileInfo $image, object|callable $filter, array $options = []): \SplFileInfo
     {
-        return new Image(__FILE__);
+        return new ImageFileInfo(__FILE__);
     }
 
     public function object(\SplFileInfo $image): object
