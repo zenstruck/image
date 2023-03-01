@@ -31,7 +31,7 @@ final class Image extends \SplFileInfo
 
     private static TransformerRegistry $transformerRegistry;
 
-    /** @var mixed[] */
+    /** @var array{0:int,1:int,mime?:string,APP13?:string} */
     private array $imageMetadata;
 
     private Dimensions $dimensions;
@@ -89,7 +89,7 @@ final class Image extends \SplFileInfo
 
     public function dimensions(): Dimensions
     {
-        return $this->dimensions ??= new Dimensions(fn() => $this->imageMetadata()); // @phpstan-ignore-line
+        return $this->dimensions ??= new Dimensions(fn() => $this->imageMetadata());
     }
 
     public function mimeType(): string
@@ -208,7 +208,7 @@ final class Image extends \SplFileInfo
     }
 
     /**
-     * @return mixed[]
+     * @return array{0:int,1:int,mime?:string,APP13?:string}
      */
     private function imageMetadata(): array
     {
@@ -227,11 +227,11 @@ final class Image extends \SplFileInfo
             return $this->imageMetadata = self::parseSvg($this) ?? throw new \RuntimeException(\sprintf('Unable to parse image metadata for "%s".', $this));
         }
 
-        return $this->imageMetadata = \array_merge($imageMetadata, $info);
+        return $this->imageMetadata = \array_merge($imageMetadata, $info); // @phpstan-ignore-line
     }
 
     /**
-     * @return null|mixed[]
+     * @return null|array{0:int,1:int,mime:string}
      */
     private static function parseSvg(\SplFileInfo $file): ?array
     {
