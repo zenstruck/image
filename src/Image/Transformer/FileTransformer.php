@@ -25,8 +25,9 @@ use Zenstruck\TempFile;
  */
 abstract class FileTransformer implements Transformer
 {
-    final public function transform(\SplFileInfo $image, callable $filter, array $options = []): \SplFileInfo
+    final public function transform(\SplFileInfo $image, callable|object $filter, array $options = []): \SplFileInfo
     {
+        $filter = static::normalizeFilter($filter);
         $image = ImageFileInfo::wrap($image);
         $options['format'] ??= $image->guessExtension();
         $output = $options['output'] ??= TempFile::withExtension($options['format']);
@@ -41,6 +42,16 @@ abstract class FileTransformer implements Transformer
         $this->save($transformed, $options);
 
         return ImageFileInfo::wrap($output);
+    }
+
+    /**
+     * @param object|callable(T):T $filter
+     *
+     * @return callable(T):T
+     */
+    public static function normalizeFilter(callable|object $filter): callable
+    {
+        return \is_callable($filter) ? $filter : throw new \InvalidArgumentException(\sprintf('"%s" does not support "%s".', self::class, $filter::class));
     }
 
     /**

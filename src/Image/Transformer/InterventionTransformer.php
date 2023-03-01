@@ -11,6 +11,7 @@
 
 namespace Zenstruck\Image\Transformer;
 
+use Intervention\Image\Filters\FilterInterface;
 use Intervention\Image\Image as InterventionImage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\ImageManagerStatic;
@@ -30,6 +31,15 @@ final class InterventionTransformer extends FileTransformer
         if (!\class_exists(ImageManager::class)) {
             throw new \LogicException('intervention/image required. Install with "composer require intervention/image".');
         }
+    }
+
+    public static function normalizeFilter(callable|object $filter): callable
+    {
+        if ($filter instanceof FilterInterface) {
+            $filter = static fn(InterventionImage $i) => $i->filter($filter);
+        }
+
+        return parent::normalizeFilter($filter);
     }
 
     protected function object(\SplFileInfo $image): object

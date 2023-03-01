@@ -11,6 +11,7 @@
 
 namespace Zenstruck\Image\Transformer;
 
+use Imagine\Filter\FilterInterface;
 use Imagine\Gd\Image as GdImage;
 use Imagine\Gd\Imagine as GdImagine;
 use Imagine\Gmagick\Image as GmagickImage;
@@ -50,6 +51,15 @@ final class ImagineTransformer extends FileTransformer
             GmagickImage::class => new self(new GmagickImagine()),
             default => throw new \InvalidArgumentException('invalid class'),
         };
+    }
+
+    public static function normalizeFilter(callable|object $filter): callable
+    {
+        if ($filter instanceof FilterInterface) {
+            $filter = static fn(ImageInterface $i) => $filter->apply($i);
+        }
+
+        return parent::normalizeFilter($filter);
     }
 
     protected function object(\SplFileInfo $image): object

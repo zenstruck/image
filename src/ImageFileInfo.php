@@ -12,7 +12,8 @@
 namespace Zenstruck;
 
 use Zenstruck\Image\Dimensions;
-use Zenstruck\Image\TransformerRegistry;
+use Zenstruck\Image\Transformer;
+use Zenstruck\Image\Transformer\MultiTransformer;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -29,7 +30,8 @@ final class ImageFileInfo extends \SplFileInfo
         'image/vnd.wap.wbmp' => 'wbmp',
     ];
 
-    private static TransformerRegistry $transformerRegistry;
+    /** @var Transformer<object> */
+    private static Transformer $transformer;
 
     /** @var array{0:int,1:int,mime?:string,APP13?:string} */
     private array $imageMetadata;
@@ -57,18 +59,18 @@ final class ImageFileInfo extends \SplFileInfo
         return new self(TempFile::for($what));
     }
 
+    /**
+     * @param object|callable(object):object $filter
+     */
     public function transform(object|callable $filter, array $options = []): self
     {
-        /** @var self $transformed */
-        $transformed = self::transformerRegistry()->transform($this, $filter, $options);
+        $transformed = self::transformer()->transform($this, $filter, $options);
 
-        return $transformed->refresh();
+        return $transformed instanceof self ? $transformed->refresh() : new self($transformed);
     }
 
     /**
-     * @template T of object
-     *
-     * @param object|callable(T):T $filter
+     * @param object|callable(object):object $filter
      */
     public function transformInPlace(object|callable $filter, array $options = []): self
     {
@@ -190,9 +192,12 @@ final class ImageFileInfo extends \SplFileInfo
         }
     }
 
-    private static function transformerRegistry(): TransformerRegistry
+    /**
+     * @return Transformer<object>
+     */
+    private static function transformer(): Transformer
     {
-        return self::$transformerRegistry ??= new TransformerRegistry();
+        return self::$transformer ??= new MultiTransformer();
     }
 
     /**
