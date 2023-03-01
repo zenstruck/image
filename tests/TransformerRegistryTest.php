@@ -104,9 +104,4 @@ class MockTransformer implements Transformer
     {
         return new ImageFileInfo(__FILE__);
     }
-
-    public function object(\SplFileInfo $image): object
-    {
-        return new \stdClass();
-    }
 }

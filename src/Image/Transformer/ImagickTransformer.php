@@ -28,7 +28,7 @@ final class ImagickTransformer extends FileTransformer
         }
     }
 
-    public function object(\SplFileInfo $image): object
+    protected function object(\SplFileInfo $image): object
     {
         $imagick = new \Imagick();
         $imagick->readImage((string) $image);

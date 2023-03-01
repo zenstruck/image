@@ -32,7 +32,7 @@ final class InterventionTransformer extends FileTransformer
         }
     }
 
-    public function object(\SplFileInfo $image): object
+    protected function object(\SplFileInfo $image): object
     {
         return $this->manager ? $this->manager->make($image) : ImageManagerStatic::make($image);
     }

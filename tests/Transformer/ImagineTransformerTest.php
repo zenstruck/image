@@ -48,9 +48,4 @@ final class ImagineTransformerTest extends FilterObjectTransformerTest
     {
         return fn(ImageInterface $image) => null;
     }
-
-    protected function objectClass(): string
-    {
-        return ImageInterface::class;
-    }
 }

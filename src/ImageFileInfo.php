@@ -75,18 +75,6 @@ final class ImageFileInfo extends \SplFileInfo
         return $this->transform($filter, \array_merge($options, ['output' => $this]));
     }
 
-    /**
-     * @template T of object
-     *
-     * @param class-string<T> $class
-     *
-     * @return T
-     */
-    public function transformer(string $class): object
-    {
-        return self::transformerRegistry()->get($class)->object($this);
-    }
-
     public function dimensions(): Dimensions
     {
         return $this->dimensions ??= new Dimensions(fn() => $this->imageMetadata());

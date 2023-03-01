@@ -52,7 +52,7 @@ final class ImagineTransformer extends FileTransformer
         };
     }
 
-    public function object(\SplFileInfo $image): object
+    protected function object(\SplFileInfo $image): object
     {
         return $this->imagine->open($image);
     }

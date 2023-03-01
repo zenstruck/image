@@ -149,16 +149,6 @@ abstract class TransformerTest extends TestCase
         $image->transform($this->invalidFilterCallback());
     }
 
-    /**
-     * @test
-     */
-    public function can_get_transformer_object(): void
-    {
-        $image = new ImageFileInfo(__DIR__.'/Fixture/files/symfony.jpg');
-
-        $this->assertInstanceOf($this->objectClass(), $image->transformer($this->objectClass()));
-    }
-
     abstract protected function invalidFilterCallback(): callable;
 
     /**
@@ -167,6 +157,4 @@ abstract class TransformerTest extends TestCase
     abstract protected function filterInvokable(): object;
 
     abstract protected function filterCallback(): callable;
-
-    abstract protected function objectClass(): string;
 }
