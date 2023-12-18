@@ -11,14 +11,14 @@
 
 namespace Zenstruck\Image\Tests\Transformer;
 
-use Zenstruck\Image\Tests\TransformerTest;
+use Zenstruck\Image\Tests\TransformerTestCase;
 use Zenstruck\ImageFileInfo;
 use Zenstruck\TempFile;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-abstract class FilterObjectTransformerTest extends TransformerTest
+abstract class FilterObjectTransformerTestCase extends TransformerTestCase
 {
     /**
      * @test

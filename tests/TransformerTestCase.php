@@ -18,7 +18,7 @@ use Zenstruck\TempFile;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-abstract class TransformerTest extends TestCase
+abstract class TransformerTestCase extends TestCase
 {
     /**
      * @test
@@ -47,7 +47,7 @@ abstract class TransformerTest extends TestCase
      */
     public function can_transform_to_specific_file(): void
     {
-        $output = TempFile::new();
+        $output = TempFile::withExtension('jpg');
         $image = new ImageFileInfo(__DIR__.'/Fixture/files/symfony.jpg');
 
         $resized = $image->transform($this->filterCallback(), ['output' => $output]);
@@ -63,7 +63,7 @@ abstract class TransformerTest extends TestCase
      */
     public function can_transform_in_place(): void
     {
-        $image = ImageFileInfo::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
+        $image = new ImageFileInfo(TempFile::for(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'), extension: 'jpg'));
 
         $this->assertSame(678, $image->dimensions()->height());
         $this->assertSame(563, $image->dimensions()->width());
@@ -105,7 +105,7 @@ abstract class TransformerTest extends TestCase
      */
     public function can_transform_to_specific_file_with_invokable_object(): void
     {
-        $output = TempFile::new();
+        $output = TempFile::withExtension('jpg');
         $image = new ImageFileInfo(__DIR__.'/Fixture/files/symfony.jpg');
 
         $resized = $image->transform($this->filterInvokable(), ['output' => $output]);
@@ -121,7 +121,7 @@ abstract class TransformerTest extends TestCase
      */
     public function can_transform_in_place_with_invokable_object(): void
     {
-        $image = ImageFileInfo::from(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'));
+        $image = new ImageFileInfo(TempFile::for(new \SplFileInfo(__DIR__.'/Fixture/files/symfony.jpg'), extension: 'jpg'));
 
         $this->assertSame(678, $image->dimensions()->height());
         $this->assertSame(563, $image->dimensions()->width());

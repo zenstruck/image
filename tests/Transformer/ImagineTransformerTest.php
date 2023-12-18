@@ -17,7 +17,7 @@ use Imagine\Image\ImageInterface;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class ImagineTransformerTest extends FilterObjectTransformerTest
+final class ImagineTransformerTest extends FilterObjectTransformerTestCase
 {
     protected function filterCallback(): callable
     {

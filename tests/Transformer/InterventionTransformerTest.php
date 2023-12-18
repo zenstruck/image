@@ -17,7 +17,7 @@ use Intervention\Image\Image as InterventionImage;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class InterventionTransformerTest extends FilterObjectTransformerTest
+final class InterventionTransformerTest extends FilterObjectTransformerTestCase
 {
     protected function filterCallback(): callable
     {

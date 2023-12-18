@@ -55,6 +55,7 @@ The following transformers are available:
 - [Imagick](https://www.php.net/manual/en/book.imagick.php)
 - [intervention\image](https://github.com/Intervention/image)
 - [imagine\imagine](https://github.com/php-imagine/Imagine)
+- [spatie\image](https://github.com/spatie/image)
 
 To use the desired transformer, type-hint the first parameter of the callable
 passed to `Zenstruck\ImageFileInfo::transform()` with the desired transformer's
@@ -64,6 +65,7 @@ _image object_:
 - **Imagick**: `\Imagick`
 - **intervention\image**: `Intervention\Image\Image`
 - **imagine\imagine**: `Imagine\Image\ImageInterface`
+- **spatie\image**: `Spatie\Image\Image`
 
 > **Note**: The return value of the callable must be the same as the passed parameter.
 

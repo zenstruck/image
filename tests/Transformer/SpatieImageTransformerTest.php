@@ -11,43 +11,31 @@
 
 namespace Zenstruck\Image\Tests\Transformer;
 
+use Spatie\Image\Image;
 use Zenstruck\Image\Tests\TransformerTestCase;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class ImagickTransformerTest extends TransformerTestCase
+final class SpatieImageTransformerTest extends TransformerTestCase
 {
-    protected function setUp(): void
+    protected function invalidFilterCallback(): callable
     {
-        if (!\class_exists(\Imagick::class)) {
-            $this->markTestSkipped('Imagick not available.');
-        }
+        return fn(Image $i) => null;
     }
 
     protected function filterInvokable(): object
     {
         return new class() {
-            public function __invoke(\Imagick $image): \Imagick
+            public function __invoke(Image $image): Image
             {
-                $image->scaleImage(100, 0);
-
-                return $image;
+                return $image->width(100);
             }
         };
     }
 
     protected function filterCallback(): callable
     {
-        return function(\Imagick $image) {
-            $image->scaleImage(100, 0);
-
-            return $image;
-        };
-    }
-
-    protected function invalidFilterCallback(): callable
-    {
-        return fn(\Imagick $image) => null;
+        return fn(Image $i) => $i->width(100);
     }
 }
