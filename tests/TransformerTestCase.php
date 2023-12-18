@@ -18,7 +18,7 @@ use Zenstruck\TempFile;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-abstract class TransformerTest extends TestCase
+abstract class TransformerTestCase extends TestCase
 {
     /**
      * @test

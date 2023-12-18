@@ -11,12 +11,12 @@
 
 namespace Zenstruck\Image\Tests\Transformer;
 
-use Zenstruck\Image\Tests\TransformerTest;
+use Zenstruck\Image\Tests\TransformerTestCase;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class ImagickTransformerTest extends TransformerTest
+final class ImagickTransformerTest extends TransformerTestCase
 {
     protected function setUp(): void
     {

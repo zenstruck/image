@@ -11,12 +11,12 @@
 
 namespace Zenstruck\Image\Tests\Transformer;
 
-use Zenstruck\Image\Tests\TransformerTest;
+use Zenstruck\Image\Tests\TransformerTestCase;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class GdImageTransformerTest extends TransformerTest
+final class GdImageTransformerTest extends TransformerTestCase
 {
     protected function filterInvokable(): object
     {
