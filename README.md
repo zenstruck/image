@@ -13,7 +13,8 @@ composer require zenstruck/image
 
 ## Usage
 
-> **Note**: `Zenstruck\ImageFileInfo` extends `\SplFileInfo`.
+> [!NOTE]
+> `Zenstruck\ImageFileInfo` extends `\SplFileInfo`.
 
 ```php
 use Zenstruck\ImageFileInfo;
@@ -44,7 +45,8 @@ $image->delete(); // void - delete the image file
 $image->getMTime();
 ```
 
-> **Note**: images created with `ImageFileInfo::from()` are created in unique temporary files
+> [!NOTE]
+> Images created with `ImageFileInfo::from()` are created in unique temporary files
 > and deleted at the end of the script.
 
 ### Transformations
@@ -67,7 +69,8 @@ _image object_:
 - **imagine\imagine**: `Imagine\Image\ImageInterface`
 - **spatie\image**: `Spatie\Image\Image`
 
-> **Note**: The return value of the callable must be the same as the passed parameter.
+> [!NOTE]
+> The return value of the callable must be the same as the passed parameter.
 
 The following example uses `\GdImage` but any of the above type-hints can be used.
 
