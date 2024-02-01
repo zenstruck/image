@@ -101,11 +101,11 @@ final class MultiTransformer implements Transformer
     private static function defaultTransformer(string $class): Transformer
     {
         return self::$defaultTransformers[$class] ??= match ($class) { // @phpstan-ignore-line
-            \GdImage::class => new Transformer\GdImageTransformer(),
-            \Imagick::class => new Transformer\ImagickTransformer(),
-            ImagineImage::class, GdImagineImage::class, ImagickImagineImage::class, GmagickImagineImage::class => Transformer\ImagineTransformer::createFor($class),
-            InterventionImage::class => new Transformer\InterventionTransformer(),
-            SpatieImage::class => new Transformer\SpatieImageTransformer(),
+            \GdImage::class => new GdImageTransformer(),
+            \Imagick::class => new ImagickTransformer(),
+            ImagineImage::class, GdImagineImage::class, ImagickImagineImage::class, GmagickImagineImage::class => ImagineTransformer::createFor($class),
+            InterventionImage::class => new InterventionTransformer(),
+            SpatieImage::class => new SpatieImageTransformer(),
             default => throw new \InvalidArgumentException(\sprintf('No transformer available for "%s".', $class)),
         };
     }

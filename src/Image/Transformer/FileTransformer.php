@@ -55,7 +55,7 @@ abstract class FileTransformer implements Transformer
     }
 
     /**
-     * @return Transformer\T
+     * @return T
      */
     abstract protected function object(\SplFileInfo $image): object;
 
@@ -65,7 +65,7 @@ abstract class FileTransformer implements Transformer
     abstract protected static function expectedClass(): string;
 
     /**
-     * @param Transformer\T                                          $object
+     * @param T                                                      $object
      * @param array{format:string,output:string}|array<string,mixed> $options
      */
     abstract protected function save(object $object, array $options): void;
