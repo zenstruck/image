@@ -18,6 +18,8 @@ use Imagine\Image\ImageInterface as ImagineImage;
 use Imagine\Imagick\Image as ImagickImagineImage;
 use Intervention\Image\Filters\FilterInterface as InterventionFilter;
 use Intervention\Image\Image as InterventionImage;
+use Intervention\Image\Interfaces\ImageInterface as InterventionImageInterface;
+use Intervention\Image\Interfaces\ModifierInterface as InterventionModifier;
 use Psr\Container\ContainerInterface;
 use Spatie\Image\Image as SpatieImage;
 use Zenstruck\Image\Transformer;
@@ -47,7 +49,7 @@ final class MultiTransformer implements Transformer
             return $this->get(ImagineImage::class)->transform($image, $filter, $options);
         }
 
-        if ($filter instanceof InterventionFilter) {
+        if ($filter instanceof InterventionFilter || $filter instanceof InterventionModifier) { // @phpstan-ignore-line
             return $this->get(InterventionImage::class)->transform($image, $filter, $options);
         }
 
@@ -104,7 +106,7 @@ final class MultiTransformer implements Transformer
             \GdImage::class => new GdImageTransformer(),
             \Imagick::class => new ImagickTransformer(),
             ImagineImage::class, GdImagineImage::class, ImagickImagineImage::class, GmagickImagineImage::class => ImagineTransformer::createFor($class),
-            InterventionImage::class => new InterventionTransformer(),
+            InterventionImage::class, InterventionImageInterface::class => new InterventionTransformer(),
             SpatieImage::class => new SpatieImageTransformer(),
             default => throw new \InvalidArgumentException(\sprintf('No transformer available for "%s".', $class)),
         };

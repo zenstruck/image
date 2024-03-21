@@ -15,6 +15,8 @@ use Intervention\Image\Filters\FilterInterface;
 use Intervention\Image\Image as InterventionImage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\ImageManagerStatic;
+use Intervention\Image\Interfaces\ImageInterface;
+use Intervention\Image\Interfaces\ModifierInterface;
 
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
@@ -22,7 +24,7 @@ use Intervention\Image\ImageManagerStatic;
  *
  * @internal
  *
- * @extends FileTransformer<InterventionImage>
+ * @extends FileTransformer<InterventionImage|ImageInterface>
  */
 final class InterventionTransformer extends FileTransformer
 {
@@ -35,8 +37,12 @@ final class InterventionTransformer extends FileTransformer
 
     public static function normalizeFilter(callable|object $filter): callable
     {
-        if ($filter instanceof FilterInterface) {
-            $filter = static fn(InterventionImage $i) => $i->filter($filter);
+        if ($filter instanceof FilterInterface) { // @phpstan-ignore-line
+            $filter = static fn(InterventionImage $i) => $i->filter($filter); // @phpstan-ignore-line
+        }
+
+        if ($filter instanceof ModifierInterface) {
+            $filter = static fn(InterventionImage $i) => $i->modify($filter);
         }
 
         return parent::normalizeFilter($filter);
@@ -44,11 +50,19 @@ final class InterventionTransformer extends FileTransformer
 
     protected function object(\SplFileInfo $image): object
     {
-        return $this->manager ? $this->manager->make($image) : ImageManagerStatic::make($image);
+        if (\interface_exists(ImageInterface::class)) {
+            return $this->manager ? $this->manager->read($image) : ImageManager::gd()->read($image);
+        }
+
+        return $this->manager ? $this->manager->make($image) : ImageManagerStatic::make($image); // @phpstan-ignore-line
     }
 
     protected static function expectedClass(): string
     {
+        if (\interface_exists(ImageInterface::class)) {
+            return ImageInterface::class;
+        }
+
         return InterventionImage::class;
     }
 

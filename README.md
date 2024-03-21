@@ -123,7 +123,7 @@ that can be passed directly to `transform()` and `transformInPlace()`:
 
 ```php
 /** @var Imagine\Filter\FilterInterface $imagineFilter */
-/** @var Intervention\Image\Filters\FilterInterface $interventionFilter */
+/** @var Intervention\Image\Filters\FilterInterface|Intervention\Image\Interfaces\ModifierInterface $interventionFilter */
 /** @var Zenstruck\ImageFileInfo $image */
 
 $transformed = $image->transform($imagineFilter);
