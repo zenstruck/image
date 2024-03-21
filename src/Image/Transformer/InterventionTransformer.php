@@ -48,7 +48,7 @@ final class InterventionTransformer extends FileTransformer
         return parent::normalizeFilter($filter);
     }
 
-    protected function object(\SplFileInfo $image): object
+    public function object(\SplFileInfo $image): object
     {
         if (\interface_exists(ImageInterface::class)) {
             return $this->manager ? $this->manager->read($image) : ImageManager::gd()->read($image);

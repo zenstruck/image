@@ -12,7 +12,6 @@
 namespace Zenstruck;
 
 use Zenstruck\Image\Dimensions;
-use Zenstruck\Image\Transformer;
 use Zenstruck\Image\Transformer\MultiTransformer;
 
 /**
@@ -30,8 +29,7 @@ final class ImageFileInfo extends \SplFileInfo
         'image/vnd.wap.wbmp' => 'wbmp',
     ];
 
-    /** @var Transformer<object> */
-    private static Transformer $transformer;
+    private static MultiTransformer $transformer;
 
     /** @var array{0:int,1:int,mime?:string,APP13?:string} */
     private array $imageMetadata;
@@ -75,6 +73,18 @@ final class ImageFileInfo extends \SplFileInfo
     public function transformInPlace(object|callable $filter, array $options = []): self
     {
         return $this->transform($filter, \array_merge($options, ['output' => $this]));
+    }
+
+    /**
+     * @template T of object
+     *
+     * @param class-string<T> $class
+     *
+     * @return T
+     */
+    public function as(string $class): object
+    {
+        return self::transformer()->object($this, $class);
     }
 
     public function dimensions(): Dimensions
@@ -192,10 +202,7 @@ final class ImageFileInfo extends \SplFileInfo
         }
     }
 
-    /**
-     * @return Transformer<object>
-     */
-    private static function transformer(): Transformer
+    private static function transformer(): MultiTransformer
     {
         return self::$transformer ??= new MultiTransformer();
     }

@@ -163,3 +163,17 @@ $thumbnail = $image->transform(new GreyscaleThumbnail(200, 200));
 
 $image->transformInPlace(new GreyscaleThumbnail(200, 200));
 ```
+
+#### Transformation Object
+
+`Zenstruck\ImageFileInfo::as()` returns a new instance of the desired
+transformation library's _image object_:
+
+```php
+use Imagine\Image\ImageInterface;
+
+/** @var Zenstruck\ImageFileInfo $image */
+
+$image->as(ImageInterface::class); // ImageInterface object for this image
+$image->as(\Imagick::class); // \Imagick object for this image
+```

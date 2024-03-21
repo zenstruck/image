@@ -24,4 +24,9 @@ interface Transformer
      * @param object|callable(T):T $filter
      */
     public function transform(\SplFileInfo $image, callable|object $filter, array $options = []): \SplFileInfo;
+
+    /**
+     * @return T
+     */
+    public function object(\SplFileInfo $image): object;
 }

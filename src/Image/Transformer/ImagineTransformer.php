@@ -62,7 +62,7 @@ final class ImagineTransformer extends FileTransformer
         return parent::normalizeFilter($filter);
     }
 
-    protected function object(\SplFileInfo $image): object
+    public function object(\SplFileInfo $image): object
     {
         return $this->imagine->open($image);
     }

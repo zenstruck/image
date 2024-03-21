@@ -23,7 +23,7 @@ use Spatie\Image\Image;
  */
 final class SpatieImageTransformer extends FileTransformer
 {
-    protected function object(\SplFileInfo $image): object
+    public function object(\SplFileInfo $image): object
     {
         if (!(new \ReflectionMethod(Image::class, 'useImageDriver'))->isStatic()) {
             // using spatie/image v2

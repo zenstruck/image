@@ -55,11 +55,6 @@ abstract class FileTransformer implements Transformer
     }
 
     /**
-     * @return T
-     */
-    abstract protected function object(\SplFileInfo $image): object;
-
-    /**
      * @return class-string<T>
      */
     abstract protected static function expectedClass(): string;

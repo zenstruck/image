@@ -48,4 +48,14 @@ final class ImagineTransformerTest extends FilterObjectTransformerTestCase
     {
         return fn(ImageInterface $image) => null;
     }
+
+    protected function objectClass(): string
+    {
+        return ImageInterface::class;
+    }
+
+    protected function objectDimensionsCallback(): callable
+    {
+        return fn(ImageInterface $i) => [$i->getSize()->getHeight(), $i->getSize()->getWidth()];
+    }
 }

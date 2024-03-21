@@ -76,6 +76,22 @@ final class MultiTransformer implements Transformer
     /**
      * @template T of object
      *
+     * @param class-string<T>|null $class
+     *
+     * @return T
+     */
+    public function object(\SplFileInfo $image, ?string $class = null): object
+    {
+        if (!$class) {
+            throw new \InvalidArgumentException(\sprintf('A class name must be provided when using %s().', __METHOD__));
+        }
+
+        return $this->get($class)->object($image);
+    }
+
+    /**
+     * @template T of object
+     *
      * @param class-string<T> $class
      *
      * @return Transformer<T>

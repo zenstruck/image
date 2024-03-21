@@ -75,4 +75,22 @@ final class InterventionTransformerTest extends FilterObjectTransformerTestCase
     {
         return fn(InterventionImage $image) => null;
     }
+
+    protected function objectClass(): string
+    {
+        if (\interface_exists(ModifierInterface::class)) {
+            return ImageInterface::class;
+        }
+
+        return InterventionImage::class;
+    }
+
+    protected function objectDimensionsCallback(): callable
+    {
+        if (\interface_exists(ModifierInterface::class)) {
+            return fn(ImageInterface $i) => [$i->height(), $i->width()];
+        }
+
+        return fn(InterventionImage $i) => [$i->height(), $i->width()];
+    }
 }
