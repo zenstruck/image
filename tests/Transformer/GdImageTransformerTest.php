@@ -37,4 +37,14 @@ final class GdImageTransformerTest extends TransformerTestCase
     {
         return fn(\GdImage $i) => null;
     }
+
+    protected function objectClass(): string
+    {
+        return \GdImage::class;
+    }
+
+    protected function objectDimensionsCallback(): callable
+    {
+        return fn(\GdImage $i) => [\imagesy($i), \imagesx($i)];
+    }
 }

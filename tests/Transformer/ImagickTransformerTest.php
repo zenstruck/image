@@ -50,4 +50,14 @@ final class ImagickTransformerTest extends TransformerTestCase
     {
         return fn(\Imagick $image) => null;
     }
+
+    protected function objectClass(): string
+    {
+        return \Imagick::class;
+    }
+
+    protected function objectDimensionsCallback(): callable
+    {
+        return fn(\Imagick $i) => [$i->getImageHeight(), $i->getImageWidth()];
+    }
 }

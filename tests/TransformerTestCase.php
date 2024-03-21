@@ -139,6 +139,23 @@ abstract class TransformerTestCase extends TestCase
     /**
      * @test
      */
+    public function can_convert_image_to_transformer_object(): void
+    {
+        $image = new ImageFileInfo(__DIR__.'/Fixture/files/symfony.jpg');
+
+        $object = $image->as($this->objectClass());
+
+        $this->assertInstanceOf($this->objectClass(), $object);
+
+        [$height, $width] = $this->objectDimensionsCallback()($object);
+
+        $this->assertSame(678, $height);
+        $this->assertSame(563, $width);
+    }
+
+    /**
+     * @test
+     */
     public function filter_callback_must_return_proper_object(): void
     {
         $image = new ImageFileInfo(__DIR__.'/Fixture/files/symfony.jpg');
@@ -148,6 +165,16 @@ abstract class TransformerTestCase extends TestCase
 
         $image->transform($this->invalidFilterCallback());
     }
+
+    /**
+     * @return class-string
+     */
+    abstract protected function objectClass(): string;
+
+    /**
+     * @return callable(object):array{int, int}
+     */
+    abstract protected function objectDimensionsCallback(): callable;
 
     abstract protected function invalidFilterCallback(): callable;
 

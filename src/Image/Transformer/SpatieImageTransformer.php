@@ -11,6 +11,7 @@
 
 namespace Zenstruck\Image\Transformer;
 
+use Spatie\Image\Enums\ImageDriver;
 use Spatie\Image\Image;
 
 /**
@@ -22,9 +23,16 @@ use Spatie\Image\Image;
  */
 final class SpatieImageTransformer extends FileTransformer
 {
-    protected function object(\SplFileInfo $image): object
+    public function object(\SplFileInfo $image): object
     {
-        return Image::load($image);
+        if (!(new \ReflectionMethod(Image::class, 'useImageDriver'))->isStatic()) {
+            // using spatie/image v2
+            return Image::load($image->getPathname());
+        }
+
+        return Image::useImageDriver(\class_exists(\Imagick::class) ? ImageDriver::Imagick : ImageDriver::Gd)
+            ->loadFile($image)
+        ;
     }
 
     protected static function expectedClass(): string

@@ -38,4 +38,14 @@ final class SpatieImageTransformerTest extends TransformerTestCase
     {
         return fn(Image $i) => $i->width(100);
     }
+
+    protected function objectClass(): string
+    {
+        return Image::class;
+    }
+
+    protected function objectDimensionsCallback(): callable
+    {
+        return fn(Image $i) => [$i->getHeight(), $i->getWidth()];
+    }
 }

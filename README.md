@@ -3,7 +3,8 @@
 [![CI Status](https://github.com/zenstruck/image/workflows/CI/badge.svg)](https://github.com/zenstruck/image/actions?query=workflow%3ACI)
 [![codecov](https://codecov.io/gh/zenstruck/image/branch/1.x/graph/badge.svg?token=MBKSCPO6U5)](https://codecov.io/gh/zenstruck/image)
 
-Image file wrapper to provide image-specific metadata and transformations.
+Image file wrapper to provide image-specific [metadata](#usage), generic [transformations](#transformations),
+and [ThumbHash generator](#thumbhash).
 
 ## Installation
 
@@ -123,7 +124,7 @@ that can be passed directly to `transform()` and `transformInPlace()`:
 
 ```php
 /** @var Imagine\Filter\FilterInterface $imagineFilter */
-/** @var Intervention\Image\Filters\FilterInterface $interventionFilter */
+/** @var Intervention\Image\Filters\FilterInterface|Intervention\Image\Interfaces\ModifierInterface $interventionFilter */
 /** @var Zenstruck\ImageFileInfo $image */
 
 $transformed = $image->transform($imagineFilter);
@@ -162,4 +163,67 @@ To use, pass a new instance to `transform()` or `transformInPlace()`:
 $thumbnail = $image->transform(new GreyscaleThumbnail(200, 200));
 
 $image->transformInPlace(new GreyscaleThumbnail(200, 200));
+```
+
+#### Transformation Object
+
+`Zenstruck\ImageFileInfo::as()` returns a new instance of the desired
+transformation library's _image object_:
+
+```php
+use Imagine\Image\ImageInterface;
+
+/** @var Zenstruck\ImageFileInfo $image */
+
+$image->as(ImageInterface::class); // ImageInterface object for this image
+$image->as(\Imagick::class); // \Imagick object for this image
+```
+
+### ThumbHash
+
+> A very compact representation of an image placeholder. Store it inline with your data and show
+> it while the real image is loading for a smoother loading experience.
+>
+> **-- [evanw.github.io/thumbhash](https://evanw.github.io/thumbhash/)**
+
+> [!NOTE]
+> [`srwiez/thumbhash`](https://github.com/SRWieZ/thumbhash) is required for this feature
+> (install with `composer require srwiez/thumbhash`).
+
+> [!NOTE]
+> [`Imagick`](https://www.php.net/manual/en/book.imagick.php) is required for this feature.
+
+#### Generate from Image
+
+```php
+use Zenstruck\Image\Hash\ThumbHash;
+
+/** @var Zenstruck\ImageFileInfo $image */
+
+$thumbHash = $image->thumbHash(); // ThumbHash
+
+$thumbHash->dataUri(); // string - the ThumbHash as a data-uri
+$thumbHash->approximateAspectRatio(); // float - the approximate aspect ratio
+$thumbHash->key(); // string - small string representation that can be cached/stored in a database
+```
+
+> [!CAUTION]
+> Generating from an image can be slow depending on the size of the source image. It is recommended
+> to cache the data-uri and/or key for subsequent requests of the same ThumbHash image.
+
+#### Generate from Key
+
+When generating from an image, the `ThumbHash::key()` method returns a small string that
+can be stored for later use. This key can be used to generate the ThumbHash without
+needing to re-process the image.
+
+```php
+use Zenstruck\Image\Hash\ThumbHash;
+
+/** @var string $key */
+
+$thumbHash = ThumbHash::fromKey($key); // ThumbHash
+
+$thumbHash->dataUri(); // string - the ThumbHash as a data-uri
+$thumbHash->approximateAspectRatio(); // float - the approximate aspect ratio
 ```
