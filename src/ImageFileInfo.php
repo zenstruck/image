@@ -12,6 +12,7 @@
 namespace Zenstruck;
 
 use Zenstruck\Image\Dimensions;
+use Zenstruck\Image\Hash\ThumbHash;
 use Zenstruck\Image\Transformer\MultiTransformer;
 
 /**
@@ -200,6 +201,11 @@ final class ImageFileInfo extends \SplFileInfo
         if (\file_exists($this)) {
             \unlink($this);
         }
+    }
+
+    public function thumbHash(): ThumbHash
+    {
+        return ThumbHash::from($this);
     }
 
     private static function transformer(): MultiTransformer
