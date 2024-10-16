@@ -33,7 +33,7 @@ final class InterventionTransformerTest extends FilterObjectTransformerTestCase
     protected function filterInvokable(): object
     {
         if (\interface_exists(ModifierInterface::class)) {
-            return new class() {
+            return new class {
                 public function __invoke(ImageInterface $image): ImageInterface
                 {
                     return $image->scale(100);
@@ -41,7 +41,7 @@ final class InterventionTransformerTest extends FilterObjectTransformerTestCase
             };
         }
 
-        return new class() {
+        return new class {
             public function __invoke(InterventionImage $image): InterventionImage
             {
                 return $image->widen(100);
@@ -55,7 +55,7 @@ final class InterventionTransformerTest extends FilterObjectTransformerTestCase
     protected function filterObject(): object
     {
         if (\interface_exists(ModifierInterface::class)) {
-            return new class() implements ModifierInterface {
+            return new class implements ModifierInterface {
                 public function apply(ImageInterface $image): ImageInterface
                 {
                     return $image->scale(100);
@@ -63,7 +63,7 @@ final class InterventionTransformerTest extends FilterObjectTransformerTestCase
             };
         }
 
-        return new class() implements FilterInterface {
+        return new class implements FilterInterface {
             public function applyFilter(InterventionImage $image): InterventionImage
             {
                 return $image->widen(100);

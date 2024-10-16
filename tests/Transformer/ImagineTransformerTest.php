@@ -26,7 +26,7 @@ final class ImagineTransformerTest extends FilterObjectTransformerTestCase
 
     protected function filterInvokable(): object
     {
-        return new class() {
+        return new class {
             public function __invoke(ImageInterface $image): ImageInterface
             {
                 return $image->thumbnail($image->getSize()->widen(100));
@@ -36,7 +36,7 @@ final class ImagineTransformerTest extends FilterObjectTransformerTestCase
 
     protected function filterObject(): FilterInterface
     {
-        return new class() implements FilterInterface {
+        return new class implements FilterInterface {
             public function apply(ImageInterface $image): ImageInterface
             {
                 return $image->thumbnail($image->getSize()->widen(100));

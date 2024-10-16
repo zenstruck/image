@@ -20,7 +20,7 @@ final class GdImageTransformerTest extends TransformerTestCase
 {
     protected function filterInvokable(): object
     {
-        return new class() {
+        return new class {
             public function __invoke(\GdImage $image): \GdImage
             {
                 return \imagescale($image, 100);

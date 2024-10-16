@@ -26,7 +26,7 @@ final class SpatieImageTransformerTest extends TransformerTestCase
 
     protected function filterInvokable(): object
     {
-        return new class() {
+        return new class {
             public function __invoke(Image $image): Image
             {
                 return $image->width(100);
