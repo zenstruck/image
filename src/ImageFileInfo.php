@@ -60,7 +60,7 @@ final class ImageFileInfo extends \SplFileInfo
 
     /**
      * @param object|callable(object):object $filter
-     * @param array<string,mixed> $options
+     * @param array<string,mixed>            $options
      */
     public function transform(object|callable $filter, array $options = []): self
     {
@@ -71,7 +71,7 @@ final class ImageFileInfo extends \SplFileInfo
 
     /**
      * @param object|callable(object):object $filter
-     * @param array<string,mixed> $options
+     * @param array<string,mixed>            $options
      */
     public function transformInPlace(object|callable $filter, array $options = []): self
     {

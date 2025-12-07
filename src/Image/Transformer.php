@@ -22,7 +22,7 @@ interface Transformer
 {
     /**
      * @param object|callable(T):T $filter
-     * @param array<string,mixed> $options
+     * @param array<string,mixed>  $options
      */
     public function transform(\SplFileInfo $image, callable|object $filter, array $options = []): \SplFileInfo;
 
