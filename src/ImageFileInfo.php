@@ -60,6 +60,7 @@ final class ImageFileInfo extends \SplFileInfo
 
     /**
      * @param object|callable(object):object $filter
+     * @param array<string,mixed> $options
      */
     public function transform(object|callable $filter, array $options = []): self
     {
@@ -70,6 +71,7 @@ final class ImageFileInfo extends \SplFileInfo
 
     /**
      * @param object|callable(object):object $filter
+     * @param array<string,mixed> $options
      */
     public function transformInPlace(object|callable $filter, array $options = []): self
     {
@@ -106,6 +108,8 @@ final class ImageFileInfo extends \SplFileInfo
     /**
      * @copyright Bulat Shakirzyanov <mallluhuct@gmail.com>
      * @source https://github.com/php-imagine/Imagine/blob/9b9aacbffadce8f19abeb992b8d8d3a90cc2a52a/src/Image/Metadata/ExifMetadataReader.php
+     *
+     * @return array<string,string>
      */
     public function exif(): array
     {
@@ -145,6 +149,8 @@ final class ImageFileInfo extends \SplFileInfo
     /**
      * @copyright Oliver Vogel
      * @source https://github.com/Intervention/image/blob/54934ae8ea3661fd189437df90fb09ec3b679c74/src/Intervention/Image/Commands/IptcCommand.php
+     *
+     * @return array<string,string>
      */
     public function iptc(): array
     {

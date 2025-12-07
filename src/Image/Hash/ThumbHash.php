@@ -65,7 +65,7 @@ final class ThumbHash
         }
 
         if (\is_string($this->source)) {
-            return $this->hash = \Thumbhash\Thumbhash::convertStringToHash($this->source);
+            return $this->hash = \Thumbhash\Thumbhash::convertStringToHash($this->source); // @phpstan-ignore return.type, assign.propertyType
         }
 
         [$width, $height, $pixels] = self::extractSizeAndPixels($this->source);
@@ -81,7 +81,7 @@ final class ThumbHash
     /**
      * @see \Thumbhash\extract_size_and_pixels_with_imagick()
      *
-     * @return array{int, int, array}
+     * @return array{int,int,list<int>}
      */
     private static function extractSizeAndPixels(\SplFileInfo $file): array
     {
