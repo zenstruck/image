@@ -26,6 +26,9 @@ final class Dimensions implements \JsonSerializable
     {
     }
 
+    /**
+     * @return array{width:int,height:int}
+     */
     public function jsonSerialize(): array
     {
         return [
