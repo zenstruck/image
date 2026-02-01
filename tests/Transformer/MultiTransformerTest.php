@@ -29,7 +29,7 @@ final class MultiTransformerTest extends TestCase
     {
         $this->expectException(\LogicException::class);
 
-        $this->image()->transform(fn() => null);
+        $this->image()->transform(static fn() => null);
     }
 
     /**
@@ -39,7 +39,7 @@ final class MultiTransformerTest extends TestCase
     {
         $this->expectException(\LogicException::class);
 
-        $this->image()->transform(fn($foo) => null);
+        $this->image()->transform(static fn($foo) => null);
     }
 
     /**
@@ -49,7 +49,7 @@ final class MultiTransformerTest extends TestCase
     {
         $this->expectException(\LogicException::class);
 
-        $this->image()->transform(fn(int $foo) => null);
+        $this->image()->transform(static fn(int $foo) => null);
     }
 
     /**
@@ -59,7 +59,7 @@ final class MultiTransformerTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->image()->transform(fn(\stdClass $c) => null);
+        $this->image()->transform(static fn(\stdClass $c) => null);
     }
 
     /**
@@ -71,7 +71,7 @@ final class MultiTransformerTest extends TestCase
             \stdClass::class => new MockTransformer(),
         ]);
 
-        $resized = $transformer->transform($this->image(), fn(\stdClass $c) => null);
+        $resized = $transformer->transform($this->image(), static fn(\stdClass $c) => null);
 
         $this->assertSame(__FILE__, (string) $resized);
     }
@@ -87,7 +87,7 @@ final class MultiTransformerTest extends TestCase
 
         $transformer = new MultiTransformer($container);
 
-        $resized = $transformer->transform($this->image(), fn(\stdClass $c) => null);
+        $resized = $transformer->transform($this->image(), static fn(\stdClass $c) => null);
 
         $this->assertSame(__FILE__, (string) $resized);
     }

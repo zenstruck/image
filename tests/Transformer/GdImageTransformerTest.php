@@ -30,12 +30,12 @@ final class GdImageTransformerTest extends TransformerTestCase
 
     protected function filterCallback(): callable
     {
-        return fn(\GdImage $i) => \imagescale($i, 100);
+        return static fn(\GdImage $i) => \imagescale($i, 100);
     }
 
     protected function invalidFilterCallback(): callable
     {
-        return fn(\GdImage $i) => null;
+        return static fn(\GdImage $i) => null;
     }
 
     protected function objectClass(): string
@@ -45,6 +45,6 @@ final class GdImageTransformerTest extends TransformerTestCase
 
     protected function objectDimensionsCallback(): callable
     {
-        return fn(\GdImage $i) => [\imagesy($i), \imagesx($i)];
+        return static fn(\GdImage $i) => [\imagesy($i), \imagesx($i)];
     }
 }

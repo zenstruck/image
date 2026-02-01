@@ -24,10 +24,10 @@ final class InterventionTransformerTest extends FilterObjectTransformerTestCase
     protected function filterCallback(): callable
     {
         if (\interface_exists(ModifierInterface::class)) {
-            return fn(InterventionImage $image) => $image->scale(100);
+            return static fn(InterventionImage $image) => $image->scale(100);
         }
 
-        return fn(InterventionImage $image) => $image->widen(100);
+        return static fn(InterventionImage $image) => $image->widen(100);
     }
 
     protected function filterInvokable(): object
@@ -73,7 +73,7 @@ final class InterventionTransformerTest extends FilterObjectTransformerTestCase
 
     protected function invalidFilterCallback(): callable
     {
-        return fn(InterventionImage $image) => null;
+        return static fn(InterventionImage $image) => null;
     }
 
     protected function objectClass(): string
@@ -88,9 +88,9 @@ final class InterventionTransformerTest extends FilterObjectTransformerTestCase
     protected function objectDimensionsCallback(): callable
     {
         if (\interface_exists(ModifierInterface::class)) {
-            return fn(ImageInterface $i) => [$i->height(), $i->width()];
+            return static fn(ImageInterface $i) => [$i->height(), $i->width()];
         }
 
-        return fn(InterventionImage $i) => [$i->height(), $i->width()];
+        return static fn(InterventionImage $i) => [$i->height(), $i->width()];
     }
 }

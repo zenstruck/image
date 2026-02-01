@@ -39,7 +39,7 @@ final class ImagickTransformerTest extends TransformerTestCase
 
     protected function filterCallback(): callable
     {
-        return function(\Imagick $image) {
+        return static function(\Imagick $image) {
             $image->scaleImage(100, 0);
 
             return $image;
@@ -48,7 +48,7 @@ final class ImagickTransformerTest extends TransformerTestCase
 
     protected function invalidFilterCallback(): callable
     {
-        return fn(\Imagick $image) => null;
+        return static fn(\Imagick $image) => null;
     }
 
     protected function objectClass(): string
@@ -58,6 +58,6 @@ final class ImagickTransformerTest extends TransformerTestCase
 
     protected function objectDimensionsCallback(): callable
     {
-        return fn(\Imagick $i) => [$i->getImageHeight(), $i->getImageWidth()];
+        return static fn(\Imagick $i) => [$i->getImageHeight(), $i->getImageWidth()];
     }
 }

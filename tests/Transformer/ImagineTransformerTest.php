@@ -21,7 +21,7 @@ final class ImagineTransformerTest extends FilterObjectTransformerTestCase
 {
     protected function filterCallback(): callable
     {
-        return fn(ImageInterface $image) => $image->thumbnail($image->getSize()->widen(100));
+        return static fn(ImageInterface $image) => $image->thumbnail($image->getSize()->widen(100));
     }
 
     protected function filterInvokable(): object
@@ -46,7 +46,7 @@ final class ImagineTransformerTest extends FilterObjectTransformerTestCase
 
     protected function invalidFilterCallback(): callable
     {
-        return fn(ImageInterface $image) => null;
+        return static fn(ImageInterface $image) => null;
     }
 
     protected function objectClass(): string
@@ -56,6 +56,6 @@ final class ImagineTransformerTest extends FilterObjectTransformerTestCase
 
     protected function objectDimensionsCallback(): callable
     {
-        return fn(ImageInterface $i) => [$i->getSize()->getHeight(), $i->getSize()->getWidth()];
+        return static fn(ImageInterface $i) => [$i->getSize()->getHeight(), $i->getSize()->getWidth()];
     }
 }

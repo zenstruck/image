@@ -21,7 +21,7 @@ final class SpatieImageTransformerTest extends TransformerTestCase
 {
     protected function invalidFilterCallback(): callable
     {
-        return fn(Image $i) => null;
+        return static fn(Image $i) => null;
     }
 
     protected function filterInvokable(): object
@@ -36,7 +36,7 @@ final class SpatieImageTransformerTest extends TransformerTestCase
 
     protected function filterCallback(): callable
     {
-        return fn(Image $i) => $i->width(100);
+        return static fn(Image $i) => $i->width(100);
     }
 
     protected function objectClass(): string
@@ -46,6 +46,6 @@ final class SpatieImageTransformerTest extends TransformerTestCase
 
     protected function objectDimensionsCallback(): callable
     {
-        return fn(Image $i) => [$i->getHeight(), $i->getWidth()];
+        return static fn(Image $i) => [$i->getHeight(), $i->getWidth()];
     }
 }
