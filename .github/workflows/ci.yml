@@ -8,16 +8,35 @@ on:
 
 jobs:
   tests:
-    uses: zenstruck/.github/.github/workflows/php-test.yml@main
+    name: PHP ${{ matrix.php }}, ${{ matrix.deps }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.3, 8.4, 8.5]
+        deps: [highest]
+        include:
+          - php: 8.3
+            deps: lowest
+    steps:
+      - uses: zenstruck/.github/actions/php-test-symfony@main
+        with:
+          php: ${{ matrix.php }}
+          deps: ${{ matrix.deps }}
 
   code-coverage:
     uses: zenstruck/.github/.github/workflows/php-coverage-codecov.yml@main
+    with:
+      php: 8.3
 
   composer-validate:
     uses: zenstruck/.github/.github/workflows/php-composer-validate.yml@main
+    with:
+      php: 8.3
 
   sca:
     uses: zenstruck/.github/.github/workflows/php-stan.yml@main
+    with:
+      php: 8.3
 
   fixcs:
     name: Run php-cs-fixer
