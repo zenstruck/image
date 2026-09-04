@@ -32,14 +32,14 @@ abstract class FilterObjectTransformerTestCase extends TransformerTestCase
         $this->assertSame(100, $resized->dimensions()->width());
         $this->assertSame(120, $resized->dimensions()->height());
         $this->assertSame('jpg', $resized->getExtension());
-        $this->assertSame('/tmp', \dirname($resized));
+        $this->assertInTempDir($resized);
 
         $resized = $image->transform($this->filterObject(), ['format' => 'png']);
 
         $this->assertSame(100, $resized->dimensions()->width());
         $this->assertSame(120, $resized->dimensions()->height());
         $this->assertSame('png', $resized->getExtension());
-        $this->assertSame('/tmp', \dirname($resized));
+        $this->assertInTempDir($resized);
     }
 
     /**

@@ -19,6 +19,8 @@ use Zenstruck\ImageFileInfo;
  */
 final class ImageFileInfoTest extends TestCase
 {
+    use TempDirAssertions;
+
     /**
      * @test
      * @dataProvider imageMetadataProvider
@@ -28,13 +30,13 @@ final class ImageFileInfoTest extends TestCase
         $this->metadataAssertions(ImageFileInfo::wrap($file), $height, $width, $mime, $extension);
 
         $this->metadataAssertions($image = ImageFileInfo::from(\file_get_contents($file)), $height, $width, $mime, $extension);
-        $this->assertSame('/tmp', \dirname($image));
+        $this->assertInTempDir($image);
 
         $this->metadataAssertions($image = ImageFileInfo::from(\fopen($file, 'r')), $height, $width, $mime, $extension);
-        $this->assertSame('/tmp', \dirname($image));
+        $this->assertInTempDir($image);
 
         $this->metadataAssertions($image = ImageFileInfo::from(new \SplFileInfo($file)), $height, $width, $mime, $extension);
-        $this->assertSame('/tmp', \dirname($image));
+        $this->assertInTempDir($image);
     }
 
     public static function imageMetadataProvider(): iterable
