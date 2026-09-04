@@ -20,6 +20,8 @@ use Zenstruck\TempFile;
  */
 abstract class TransformerTestCase extends TestCase
 {
+    use TempDirAssertions;
+
     /**
      * @test
      */
@@ -32,14 +34,14 @@ abstract class TransformerTestCase extends TestCase
         $this->assertSame(100, $resized->dimensions()->width());
         $this->assertSame(120, $resized->dimensions()->height());
         $this->assertSame('jpg', $resized->getExtension());
-        $this->assertSame('/tmp', \dirname($resized));
+        $this->assertInTempDir($resized);
 
         $resized = $image->transform($this->filterCallback(), ['format' => 'png']);
 
         $this->assertSame(100, $resized->dimensions()->width());
         $this->assertSame(120, $resized->dimensions()->height());
         $this->assertSame('png', $resized->getExtension());
-        $this->assertSame('/tmp', \dirname($resized));
+        $this->assertInTempDir($resized);
     }
 
     /**
@@ -90,14 +92,14 @@ abstract class TransformerTestCase extends TestCase
         $this->assertSame(100, $resized->dimensions()->width());
         $this->assertSame(120, $resized->dimensions()->height());
         $this->assertSame('jpg', $resized->getExtension());
-        $this->assertSame('/tmp', \dirname($resized));
+        $this->assertInTempDir($resized);
 
         $resized = $image->transform($this->filterCallback(), ['format' => 'png']);
 
         $this->assertSame(100, $resized->dimensions()->width());
         $this->assertSame(120, $resized->dimensions()->height());
         $this->assertSame('png', $resized->getExtension());
-        $this->assertSame('/tmp', \dirname($resized));
+        $this->assertInTempDir($resized);
     }
 
     /**
