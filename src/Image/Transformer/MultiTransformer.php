@@ -11,6 +11,9 @@
 
 namespace Zenstruck\Image\Transformer;
 
+use Alto\Image\Image as AltoImage;
+use Alto\Image\Operation\OperationInterface as AltoOperation;
+use Alto\Image\Transform as AltoTransform;
 use Imagine\Filter\FilterInterface as ImagineFilter;
 use Imagine\Gd\Image as GdImagineImage;
 use Imagine\Gmagick\Image as GmagickImagineImage;
@@ -45,6 +48,10 @@ final class MultiTransformer implements Transformer
 
     public function transform(\SplFileInfo $image, callable|object $filter, array $options = []): \SplFileInfo
     {
+        if ($filter instanceof AltoOperation || $filter instanceof AltoTransform) {
+            return $this->get(AltoImage::class)->transform($image, $filter, $options);
+        }
+
         if ($filter instanceof ImagineFilter) {
             return $this->get(ImagineImage::class)->transform($image, $filter, $options);
         }
@@ -119,6 +126,7 @@ final class MultiTransformer implements Transformer
     private static function defaultTransformer(string $class): Transformer
     {
         return self::$defaultTransformers[$class] ??= match ($class) { // @phpstan-ignore-line
+            AltoImage::class => new AltoImageTransformer(),
             \GdImage::class => new GdImageTransformer(),
             \Imagick::class => new ImagickTransformer(),
             ImagineImage::class, GdImagineImage::class, ImagickImagineImage::class, GmagickImagineImage::class => ImagineTransformer::createFor($class),
