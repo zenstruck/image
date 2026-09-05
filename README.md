@@ -59,6 +59,7 @@ The following transformers are available:
 - [intervention\image](https://github.com/Intervention/image)
 - [imagine\imagine](https://github.com/php-imagine/Imagine)
 - [spatie\image](https://github.com/spatie/image)
+- [alto\image](https://github.com/altophp/image)
 
 To use the desired transformer, type-hint the first parameter of the callable
 passed to `Zenstruck\ImageFileInfo::transform()` with the desired transformer's
@@ -69,6 +70,7 @@ _image object_:
 - **intervention\image**: `Intervention\Image\Image`
 - **imagine\imagine**: `Imagine\Image\ImageInterface`
 - **spatie\image**: `Spatie\Image\Image`
+- **alto\image**: `Alto\Image\Image`
 
 > [!NOTE]
 > The return value of the callable must be the same as the passed parameter.
@@ -119,19 +121,45 @@ $resized = $image->transformInPlace(function(\GdImage $image): \GdImage {
 
 #### Filter Objects
 
-Both _Imagine_ and _Intervention_ have the concept of _filters_. These are objects
-that can be passed directly to `transform()` and `transformInPlace()`:
+_Imagine_, _Intervention_ and _Alto_ have the concept of _filters_ (Alto calls them
+_operations_). These are objects that can be passed directly to `transform()` and
+`transformInPlace()`:
 
 ```php
 /** @var Imagine\Filter\FilterInterface $imagineFilter */
 /** @var Intervention\Image\Filters\FilterInterface|Intervention\Image\Interfaces\ModifierInterface $interventionFilter */
+/** @var Alto\Image\Operation\OperationInterface $altoOperation */
 /** @var Zenstruck\ImageFileInfo $image */
 
 $transformed = $image->transform($imagineFilter);
 $transformed = $image->transform($interventionFilter);
+$transformed = $image->transform($altoOperation);
 
 $image->transformInPlace($imagineFilter);
 $image->transformInPlace($interventionFilter);
+$image->transformInPlace($altoOperation);
+```
+
+##### Alto Transformations
+
+An `Alto\Image\Transform` is a chain of Alto's own operations and can be passed
+directly as well:
+
+```php
+use Alto\Image\Operation\Resize;
+use Alto\Image\Operation\Sharpen;
+use Alto\Image\Transform;
+
+/** @var Zenstruck\ImageFileInfo $image */
+
+$transform = Transform::new()->with(new Resize(width: 100), new Sharpen());
+
+// ...or created from Alto's string form
+$transform = Transform::parse('inside=100x|sharpen=1');
+
+$transformed = $image->transform($transform);
+
+$image->transformInPlace($transform);
 ```
 
 ##### Custom Filter Objects
@@ -168,15 +196,17 @@ $image->transformInPlace(new GreyscaleThumbnail(200, 200));
 #### Transformation Object
 
 `Zenstruck\ImageFileInfo::as()` returns a new instance of the desired
-transformation library's _image object_:
+transformation library's _image object_ - any of the type-hints listed above:
 
 ```php
-use Imagine\Image\ImageInterface;
-
 /** @var Zenstruck\ImageFileInfo $image */
 
-$image->as(ImageInterface::class); // ImageInterface object for this image
-$image->as(\Imagick::class); // \Imagick object for this image
+$image->as(\GdImage::class);
+$image->as(\Imagick::class);
+$image->as(Intervention\Image\Image::class);
+$image->as(Imagine\Image\ImageInterface::class);
+$image->as(Spatie\Image\Image::class);
+$image->as(Alto\Image\Image::class);
 ```
 
 ### ThumbHash

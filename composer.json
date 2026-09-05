@@ -16,6 +16,7 @@
         "zenstruck/temp-file": "^1.0"
     },
     "require-dev": {
+        "alto/image": "dev-main",
         "imagine/imagine": "^1.3",
         "intervention/image": "^2.7|^3.0",
         "phpstan/phpstan": "^2.0",
@@ -37,6 +38,7 @@
         "psr-4": { "Zenstruck\\Image\\Tests\\": ["tests/"] }
     },
     "suggest": {
+        "alto/image": "To use the Alto image transformer.",
         "imagine/imagine": "To use the Imagine image transformer.",
         "intervention/image": "To use the Intervention image transformer.",
         "srwiez/thumbhash": "To generate ThumbHashes."
